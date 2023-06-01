@@ -15,10 +15,19 @@ class CoursesController extends Controller
         $result = Courses::limit(4)->get();
         return response()->json($result);
     }
-    public function onSelectAll()
+    public function onSelectAll(Request $request)
     {
-        $result = Courses::all();
-        return response()->json($result);
+        $perPage = 6; // Number of courses per page
+        $page = $request->page; // Current page
+        $courses = Courses::paginate($perPage, ['*'], 'page', $page);
+        $totalPages = $courses->lastPage(); // Use lastPage() method instead of accessing the protected property
+
+        return response()->json([
+            "total_pages" => $totalPages,
+            "courses" => $courses,
+            "request" => $request->input(),
+        ]);
+
     }
     public function onSelectDetails(Request $request, $id)
     {
