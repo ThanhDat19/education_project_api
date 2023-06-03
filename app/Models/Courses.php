@@ -15,16 +15,16 @@ class Courses extends Model
         'course_category_id',
         'title',
         'slug',
+        'price',
         'description',
         'video_course',
-        'price',
         'course_image',
         'start_date',
         'published'
     ];
 
     public function category(){
-        return $this->belongsTo(CourseCategory::class, 'id', 'course_category_id');
+        return $this->belongsTo(CourseCategory::class, 'course_category_id', 'id');
     }
 
     public function lessons(){

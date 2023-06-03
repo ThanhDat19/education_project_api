@@ -34,6 +34,20 @@
             </div>
 
             <div class="form-group">
+                <label for="question_type">Loại câu hỏi:</label>
+                <select id="question-type-select" class="form-control">
+                    <option value="">Tất cả lĩnh vực</option>
+                    @foreach ($questionTypes as $questionType)
+                        <option value="{{ $questionType->id }}">{{ $questionType->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div id="question-list">
+                <!-- List of questions based on selected question type will be displayed here -->
+            </div>
+
+            <div class="form-group">
                 <div class="custom-control custom-radio">
                     <input class="custom-control-input" type="radio" name="published" id="active" value="1"
                         checked="" id="active">

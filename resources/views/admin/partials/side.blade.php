@@ -98,7 +98,7 @@
                     </ul>
                 </li>
 
-                {{-- TEST --}}
+                {{-- QUESTIONS --}}
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">
                         <i class="nav-icon fas fa-question-circle"></i>
@@ -110,6 +110,22 @@
                         </li>
                         <li class="submenu-item">
                             <a href="/admin/questions/list">Danh sách câu hỏi</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- QUESTION TYPES --}}
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="nav-icon fas fa-address-book"></i>
+                        <span>Lĩnh Vực Câu Hỏi</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="/admin/question-types/add">Thêm lĩnh vực</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="/admin/question-types/list">Danh sách lĩnh vực</a>
                         </li>
                     </ul>
                 </li>

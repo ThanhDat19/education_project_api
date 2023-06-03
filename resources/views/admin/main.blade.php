@@ -4,6 +4,8 @@
 <head>
     @include('admin.header')
     <style>
+
+
         .dataTables_length label {
             margin: 10px 10px;
         }
@@ -14,6 +16,7 @@
         .dataTables_info {
             display: none;
         }
+
         .dataTables_length label select {
             border-radius: 5px !important;
             padding: 0 5px;
@@ -29,7 +32,8 @@
             border-radius: 5px !important;
             margin-left: 8px;
         }
-        .dataTables_length{
+
+        .dataTables_length {
             display: none;
         }
     </style>

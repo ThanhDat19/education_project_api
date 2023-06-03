@@ -139,3 +139,37 @@ $('#upload').change(function () {
         }
     })
 })
+
+
+// $(document).ready(function() {
+//     // Gửi request filter khi có sự thay đổi trong select box và input
+//     $('#course-type, #course-price, #search-input').on('change keyup', function() {
+//         filterCourses();
+//     });
+
+//     // Hàm gửi request filter và hiển thị kết quả
+//     function filterCourses() {
+//         var priceMin = $('#course-price-min').val();
+//         var priceMax = $('#course-price-max').val();
+//         var type = $('#course-type').val();
+//         var keyword = $('#search-input').val();
+
+//         $.ajax({
+//             url: "{{ route('admin.courses.filter') }}",
+//             method: 'POST',
+//             data: {
+//                 _token: "{{ csrf_token() }}",
+//                 priceMin: priceMin,
+//                 priceMax: priceMax,
+//                 type: type,
+//                 keyword: keyword
+//             },
+//             success: function(response) {
+//                 $('#filtered-courses').html(response);
+//             },
+//             error: function(xhr) {
+//                 console.log(xhr.responseText);
+//             }
+//         });
+//     }
+// });

@@ -11,13 +11,21 @@ class Question extends Model
     use HasFactory;
     use SoftDeletes;
     protected $fillable = [
-        'test_id',
         'question',
+        'question_type_id',
         'question_image',
-        'score'
+        'score',
+        'multi_answer'
     ];
 
-    public function options(){
+    public function options()
+    {
         return $this->hasMany(QuestionOption::class, 'question_id', 'id');
     }
+
+    public function tests()
+    {
+        return $this->belongsToMany(Test::class, 'test_questions');
+    }
+
 }

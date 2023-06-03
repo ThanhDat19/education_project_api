@@ -4,20 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('test_questions', function (Blueprint $table) {
             $table->id();
-            $table->text('question');
-            $table->unsignedBigInteger('question_type_id')->nullable();
-            $table->string('question_image')->nullable();
-            $table->integer('score');
-            $table->integer('multi_answer')->default(0);
+            $table->unsignedBigInteger('test_id');
+            $table->unsignedBigInteger('question_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('test_questions');
     }
 };

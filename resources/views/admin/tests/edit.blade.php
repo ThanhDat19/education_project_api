@@ -4,11 +4,13 @@
 @section('contents')
     <form action="" method="post">
         @csrf
+        @method('PUT')
         <div class="card-body">
 
             <div class="form-group">
                 <label for="test">Tiêu đề bài kiểm tra</label>
-                <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề bài kiểm tra" value="{{ $test->title }}">
+                <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề bài kiểm tra"
+                    value="{{ $test->title }}">
             </div>
 
             <div class="form-group">
@@ -31,6 +33,20 @@
             <div class="form-group">
                 <label for="test">Miêu tả</label>
                 <textarea name="description" id="content" class="form-control">{{ $test->description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="question_type">Loại câu hỏi:</label>
+                <select id="question-type-select" class="form-control">
+                    <option value="">Tất cả lĩnh vực</option>
+                    @foreach ($questionTypes as $questionType)
+                        <option value="{{ $questionType->id }}">{{ $questionType->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div id="question-list">
+                <!-- List of questions based on selected question type will be displayed here -->
             </div>
 
             <div class="form-group">

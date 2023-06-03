@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use App\Models\QuestionType;
 use App\Models\Test;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,20 +23,21 @@ class QuestionController extends Controller
 
     public function create()
     {
-        $tests = Test::all();
+        $questionTypes = QuestionType::all();
         return view('admin.questions.add', [
             'title' => 'Thêm Câu Hỏi',
-            'tests' => $tests
+            'questionTypes' => $questionTypes
         ]);
     }
 
     public function store(Request $request)
     {
         Question::create([
-            "test_id" => $request->input('test_id'),
+            "question_type_id" => $request->input('question_type_id'),
             "question" => $request->input('question'),
-            "score" =>  $request->input('score'),
-            "question_image" =>  $request->input('question_image'),
+            "score" => $request->input('score'),
+            "question_image" => $request->input('question_image'),
+            "multi_answer" => $request->input('multi_answer'),
         ]);
 
         try {
@@ -50,10 +52,10 @@ class QuestionController extends Controller
 
     public function show(Question $question)
     {
-        $tests = Test::all();
+        $questionTypes = QuestionType::all();
         return view('admin.questions.edit', [
             'title' => 'Chỉnh Sửa Câu Hỏi',
-            'tests' => $tests,
+            'questionTypes' => $questionTypes,
             'question' => $question
         ]);
     }
@@ -61,10 +63,11 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $question->fill([
-            "test_id" => $request->input('test_id'),
+            "question_type_id" => $request->input('question_type_id'),
             "question" => $request->input('question'),
-            "score" =>  $request->input('score'),
-            "question_image" =>  $request->input('question_image')
+            "score" => $request->input('score'),
+            "question_image" => $request->input('question_image'),
+            "multi_answer" => $request->input('multi_answer'),
         ]);
         $question->save();
         try {
@@ -97,5 +100,13 @@ class QuestionController extends Controller
                 'message' => 'Đã có lỗi xảy ra'
             ]);
         }
+    }
+
+    public function filterByType(Request $request)
+    {
+        $questionTypeId = $request->input('questionTypeId');
+        $questions = Question::where('question_type_id', $questionTypeId)->get();
+
+        return view('admin.questions.filter-by-type',['questions' => $questions]);
     }
 }

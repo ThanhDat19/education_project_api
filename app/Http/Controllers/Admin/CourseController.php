@@ -17,10 +17,12 @@ class CourseController extends Controller
 {
     public function index()
     {
+        $categories = CourseCategory::all();
         $courses = Courses::paginate(10);
         return view('admin.course.list', [
             'title' => 'Danh Sách Khóa Học',
-            'courses' => $courses
+            'courses' => $courses,
+            'categories' => $categories
         ]);
     }
 
