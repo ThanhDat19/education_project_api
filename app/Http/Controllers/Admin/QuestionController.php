@@ -105,8 +105,14 @@ class QuestionController extends Controller
     public function filterByType(Request $request)
     {
         $questionTypeId = $request->input('questionTypeId');
-        $questions = Question::where('question_type_id', $questionTypeId)->get();
+        $questions = null;
+        if ($questionTypeId) {
+            $questions = Question::where('question_type_id', $questionTypeId)->get();
+        }
+        else{
+            $questions = Question::all();
+        }
 
-        return view('admin.questions.filter-by-type',['questions' => $questions]);
+        return view('admin.questions.filter-by-type', ['questions' => $questions]);
     }
 }

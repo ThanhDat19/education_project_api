@@ -1,30 +1,47 @@
-<div class="container">
-    <div class="row">
-        @foreach ($questions as $question)
-            <div class="card" style="width: 18rem; margin-right: 2rem">
-
-                <img class="card-img-top" src="{{ asset($question->question_image) }}" alt="{{ $question->question }}">
-                <div class="card-body">
-                    <h5 class="card-title"> {{ $question->question }}</h5>
-                    <p class="card-text">Điểm số: {{ $question->score }}</p>
-                </div>
-                <div class="card-footer">
-                    <label for="">Chọn câu hỏi</label>
-                    <input type="checkbox" name="questions[]" value="{{ $question->id }}">
-                    <div class="">
-                        <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="active" value="1"
-                                {{ $question->multi_answer == 1 ? 'checked=""' : '' }} id="active">
-                            <label class="custom-control-label" for="active">Có</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input class="custom-control-input" type="radio" id="non_active" value="0"
-                                {{ $question->multi_answer == 0 ? 'checked=""' : '' }}>
-                            <label class="custom-control-label"for="non_active">Không</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+<section class="section">
+    <div class="card">
+        <div class="card-body">
+            @php
+                \Carbon\Carbon::setLocale('vi');
+            @endphp
+            <table id="myTable" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            {{-- <input type="checkbox" id="checkAll"> --}}
+                        </th>
+                        <th style="width: 50px">STT</th>
+                        <th>Hình ảnh</th>
+                        <th>Tiêu đề</th>
+                        <th>Điểm số</th>
+                        <th>Nhiều đáp án</th>
+                        <th>Thời gian tạo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php($i = 1)
+                    @foreach ($questions as $question)
+                        <tr class="question-item">
+                            <td>
+                                <input type="checkbox" name="questions[]" value="{{ $question->id }}">
+                            </td>
+                            <td>{{ $i++ }}</td>
+                            <td>
+                                @if ($question->question_image)
+                                    <img src="{{ asset($question->question_image) }}" alt="Question Image"
+                                        class="question-image">
+                                @else
+                                    No Image
+                                @endif
+                            </td>
+                            <td>{{ $question->question }}</td>
+                            <td>{{ $question->score }}</td>
+                            <td>{{ $question->multi_answer ? 'Có' : 'Không' }}</td>
+                            <td>{{ $question->updated_at->diffForHumans() }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</section>

@@ -82,11 +82,6 @@
         });
         // $('#filter-price').click(function() {
 
-
-
-
-
-
         //     // table.column(4).search((data, row) => {
         //     //     var price = parseInt(data.replace(/\D/g,
         //     //     console.log(true)
@@ -112,6 +107,21 @@
 
 <script>
     $(document).ready(function() {
+        loadData();
+
+        function loadData() {
+            $.ajax({
+                url: '/admin/questions/filter-by-type', // Đường dẫn đến tuyến đường xử lý trong Laravel
+                type: 'POST',
+                data: {
+                    questionTypeId: null,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $('#question-list').html(response);
+                }
+            });
+        }
         $('#question-type-select').change(function() {
             var questionTypeId = $(this).val();
 
@@ -128,7 +138,6 @@
             });
         });
     });
-</script>
 </script>
 {{-- <script src="{{ asset('template/assets/extensions/apexcharts/apexcharts.min.js') }}"></script> --}}
 {{-- <script src="{{ asset('template/assets/js/pprices/dashboard.js') }}"></script> --}}
