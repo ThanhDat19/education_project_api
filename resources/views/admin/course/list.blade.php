@@ -29,6 +29,7 @@
                         <input type="number" id="min-price-input" class="form-control">
                         <label for="max-price">Giá tối đa:</label>
                         <input type="number" id="max-price-input" class="form-control">
+                        <button id="filter-price" class="btn btn-primary mt-2">Lọc theo giá</button>
                     </div>
                 </div>
                 @php

@@ -1,37 +1,47 @@
 @extends('admin.main')
 @section('head')
+    <style>
+        .question-image {
+            max-width: 100px;
+        }
+    </style>
 @endsection
 @section('contents')
     <section class="section">
         <div class="card">
             <div class="card-body">
-
+                @php
+                    \Carbon\Carbon::setLocale('vi');
+                @endphp
                 <table id="myTable" class="table">
                     <thead>
                         <tr>
-                            <th style="width: 50px">ID</th>
-                            <th>Nội dung câu hỏi</th>
+                            <th style="width: 50px">STT</th>
+                            <th>Hình ảnh</th>
+                            <th>Tiêu đề</th>
                             <th>Điểm số</th>
-                            <th>Cập nhật</th>
+                            <th>Nhiều đáp án</th>
+                            <th>Thời gian cập nhật</th>
                             <th style="width: 150px">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php($i = 1)
                         @foreach ($questions as $question)
-                            <tr>
+                            <tr class="question-item">
                                 <td>{{ $i++ }}</td>
-                                <td>{{ $question->question }}</td>
                                 <td>
-                                    {{ $question->score }}
-                                </td>
-                                <td>
-                                    @if($question->updated_at == NULL)
-                                    <span class="text-danger">Chưa đặt thời gian</span>
+                                    @if ($question->question_image)
+                                        <img src="{{ asset($question->question_image) }}" alt="Question Image"
+                                            class="question-image">
                                     @else
-                                    {{ $question->updated_at->diffForHumans() }}
+                                        No Image
                                     @endif
                                 </td>
+                                <td>{{ $question->question }}</td>
+                                <td>{{ $question->score }}</td>
+                                <td>{{ $question->multi_answer ? 'Có' : 'Không' }}</td>
+                                <td>{{ $question->updated_at->diffForHumans() }}</td>
                                 <td>
                                     <a href="/admin/questions/edit/{{ $question->id }}" class="btn btn-primary">
                                         <i class="fas fa-edit"></i>

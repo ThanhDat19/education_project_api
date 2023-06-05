@@ -77,7 +77,7 @@
                 return false;
             }
         )
-        $('#min-price-input, #max-price-input').keyup(function() {
+        $('#filter-price').click(function() {
             table.draw();
         });
         // $('#filter-price').click(function() {

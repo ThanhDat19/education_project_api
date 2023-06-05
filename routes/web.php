@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\QuestionTypeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -90,3 +91,11 @@ Route::get('/admin/question-types/list', [QuestionTypeController::class, 'index'
 Route::get('/admin/question-types/edit/{type}', [QuestionTypeController::class, 'show']);
 Route::put('/admin/question-types/edit/{type}', [QuestionTypeController::class, 'update']);
 Route::delete('/admin/question-types/destroy', [QuestionTypeController::class, 'delete']);
+#Pages
+Route::get('/admin/pages/list', [PageController::class, 'homeList'])->name('pages.list');
+Route::get('/admin/pages/home/edit/{home}', [PageController::class, 'homeShow']);
+Route::put('/admin/pages/home/edit/{home}', [PageController::class, 'homeEdit']);
+Route::get('/admin/pages/footer/edit/{footer}', [PageController::class, 'footerShow']);
+Route::put('/admin/pages/footer/edit/{footer}', [PageController::class, 'footerEdit']);
+Route::get('/admin/pages/information/edit/{information}', [PageController::class, 'informationShow']);
+Route::put('/admin/pages/information/edit/{information}', [PageController::class, 'informationEdit']);

@@ -141,6 +141,9 @@
                             <a href="/profile/edit/{{ Auth::user()->id }}">Cập nhật thông tin</a>
                         </li>
                         <li class="submenu-item">
+                            <a href="/admin/pages/list">Cập nhật trang</a>
+                        </li>
+                        <li class="submenu-item">
                             {{-- <a href="/admin/accounts/admins/list">Đăng xuất</a> --}}
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault();

@@ -74,22 +74,22 @@ class CourseController extends Controller
 
     public function update(Request $request, Courses $course)
     {
-        $timestamp = Carbon::createFromFormat('d-m-Y', $request->input('start_date'))->timestamp;
-        $datetime = DateTime::createFromFormat('U', $timestamp);
-        $course->fill([
-            "instructor" => Auth::user()->id,
-            "course_category_id" => $request->input('course_category_id'),
-            "title" => $request->input('title'),
-            "slug" => Str::slug($request->input('title'), '-'),
-            "description" => $request->input('description'),
-            "price" => $request->input('price'),
-            "course_image" => $request->input('image'),
-            "start_date" => $datetime->format('Y-m-d H:i:s'),
-            "published" => $request->input('published'),
-        ]);
-        $course->save();
-        try {
 
+        try {
+            $timestamp = Carbon::createFromFormat('d-m-Y', $request->input('start_date'))->timestamp;
+            $datetime = DateTime::createFromFormat('U', $timestamp);
+            $course->fill([
+                "instructor" => Auth::user()->id,
+                "course_category_id" => $request->input('course_category_id'),
+                "title" => $request->input('title'),
+                "slug" => Str::slug($request->input('title'), '-'),
+                "description" => $request->input('description'),
+                "price" => $request->input('price'),
+                "course_image" => $request->input('image'),
+                "start_date" => $datetime->format('Y-m-d H:i:s'),
+                "published" => $request->input('published'),
+            ]);
+            $course->save();
             Session::flash('success', 'Cập nhật khóa học thành công');
         } catch (\Exception $err) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');

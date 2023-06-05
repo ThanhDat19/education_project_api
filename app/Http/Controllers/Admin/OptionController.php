@@ -15,7 +15,7 @@ class OptionController extends Controller
     {
         $options = QuestionOption::where('question_id', $question->id)->paginate(10);
         return view('admin.options.list', [
-            'title' => 'Danh Sách Lựa Chọn (Câu hỏi: '. $question->question .')',
+            'title' => 'Danh Sách Lựa Chọn (Câu hỏi: ' . $question->question . ')',
             'options' => $options,
             'question' => $question
         ]);
@@ -43,11 +43,11 @@ class OptionController extends Controller
         } catch (Exception $error) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');
         }
-        return redirect()->route('question.options', ['question'=> $question->id]);
+        return redirect()->route('question.options', ['question' => $question->id]);
     }
 
 
-    public function show(QuestionOption $option,Question $question)
+    public function show(QuestionOption $option, Question $question)
     {
         return view('admin.options.edit', [
             'title' => 'Chỉnh Sửa Lựa Chọn',
@@ -58,18 +58,18 @@ class OptionController extends Controller
 
     public function update(Request $request, QuestionOption $option, Question $question)
     {
-        $option->fill([
-            'question_id' => $question->id,
-            'option_text' => $request->input('option_text'),
-            'correct' => $request->input('correct'),
-        ]);
-        $option->save();
         try {
+            $option->fill([
+                'question_id' => $question->id,
+                'option_text' => $request->input('option_text'),
+                'correct' => $request->input('correct'),
+            ]);
+            $option->save();
             Session::flash('success', 'Cập nhật lựa chọn thành công');
         } catch (\Exception $err) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');
         }
-        return redirect()->route('question.options', ['question'=> $question->id]);
+        return redirect()->route('question.options', ['question' => $question->id]);
     }
     public function delete(Request $request)
     {

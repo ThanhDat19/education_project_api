@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CourseStudentController;
+use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\API\CoursesController;
