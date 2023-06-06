@@ -22,7 +22,9 @@
                             <!-- Thêm các loại khác vào đây -->
                         </select>
 
-                        <button id="filter-new" class="btn btn-primary">Lọc khóa học mới tạo</button>
+                        <button id="filter-new" class="btn btn-primary mt-2">Lọc khóa học mới tạo</button>
+
+
                     </div>
                     <div class="col-md-6">
                         <label for="min-price">Giá tối thiểu:</label>
@@ -87,6 +89,9 @@
                                     <a href="#" onclick="removeRow({{ $course->id }},'/admin/course/destroy')"
                                         class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
+                                    </a>
+                                    <a href="/admin/tests/add-test-for-course/{{ $course->id }}" class="btn btn-info">
+                                        +
                                     </a>
                                 </td>
                             </tr>

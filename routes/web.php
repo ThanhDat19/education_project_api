@@ -66,6 +66,10 @@ Route::delete('/admin/tests/destroy', [TestController::class, 'delete']);
 Route::post('/admin/tests/get-lesson-of-course', [TestController::class, 'getLessonOfCourse'])->name('get.lessons');
 Route::get('/admin/tests/add', [TestController::class, 'create']);
 Route::post('/admin/tests/add', [TestController::class, 'store']);
+
+Route::get('/admin/tests/add-test-for-course/{course}', [TestController::class, 'createTestForCourse']);
+Route::post('/admin/tests/add-test-for-course/{course}', [TestController::class, 'storeTestForCourse']);
+
 Route::post('/admin/questions/filter-by-type', [QuestionController::class, 'filterByType'])->name('questions.filterByType');
 
 #Question

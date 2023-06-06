@@ -16,6 +16,9 @@
                             <th style="width: 150px">&nbsp;</th>
                         </tr>
                     </thead>
+                    @php
+                        \Carbon\Carbon::setLocale('vi');
+                    @endphp
                     <tbody>
                         @php($i = 1)
                         @foreach ($courseCategories as $category)
@@ -23,24 +26,25 @@
                                 <td>{{ $i++ }}</td>
                                 <td>{{ $category->name }}</td>
                                 <td>
-                                    @if ($category->deleted_at != NULL)
+                                    @if ($category->deleted_at != null)
                                         <span class="btn btn-danger btn-xs">NO</span>
                                     @else
                                         <span class="btn btn-success btn-xs">YES</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($category->updated_at == NULL)
-                                    <span class="text-danger">Chưa đặt thời gian</span>
+                                    @if ($category->updated_at == null)
+                                        <span class="text-danger">Chưa đặt thời gian</span>
                                     @else
-                                    {{ $category->updated_at->diffForHumans() }}
+                                        {{ $category->updated_at->diffForHumans() }}
                                     @endif
                                 </td>
                                 <td>
                                     <a href="/admin/course-category/edit/{{ $category->id }}" class="btn btn-primary">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="#" onclick="removeRow({{ $category->id }},'/admin/course-category/destroy')"
+                                    <a href="#"
+                                        onclick="removeRow({{ $category->id }},'/admin/course-category/destroy')"
                                         class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </a>

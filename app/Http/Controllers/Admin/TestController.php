@@ -149,4 +149,47 @@ class TestController extends Controller
             'lessons' => $lessons
         ]);
     }
+
+    public function createTestForCourse(Courses $course)
+    {
+        $questionTypes = QuestionType::all();
+        $questions = Question::all();
+        return view('admin.tests.add-for-course', [
+            'title' => 'Thêm Bài Kiểm Tra Cho Khóa Học ' . $course->title,
+            'course' => $course,
+            'questionTypes' => $questionTypes,
+            'questions' => $questions
+        ]);
+    }
+    public function storeTestForCourse(Request $request, Courses $course)
+    {
+        try {
+            // Lấy dữ liệu từ request
+            $data = $request->validate([
+                'title' => 'required|string',
+                'course_id' => 'required|integer',
+                'lesson_id' => 'required|integer',
+                'description' => 'required|string',
+                'questions' => 'required|array',
+                'published' => 'required|integer',
+            ]);
+
+            // Tạo bài kiểm tra mới
+            $test = Test::create([
+                'title' => $data['title'],
+                'course_id' => $data['course_id'],
+                'lesson_id' => $data['lesson_id'],
+                'description' => $data['description'],
+                'published' => $data['published'],
+            ]);
+
+            // Liên kết các câu hỏi đã chọn với bài kiểm tra
+            $questions = Question::whereIn('id', $data['questions'])->get();
+            $test->questions()->attach($questions);
+            Session::flash('success', 'Thêm bài kiểm tra mới thành công');
+        } catch (Exception $error) {
+            Session::flash('error', 'Có lỗi vui lòng thử lại');
+        }
+        return redirect()->back();
+    }
 }

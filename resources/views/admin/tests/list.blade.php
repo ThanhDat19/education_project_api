@@ -10,18 +10,23 @@
                     <thead>
                         <tr>
                             <th style="width: 50px">ID</th>
-                            <th>Tiêu Đề Bài Kiểm Tra</th>
+                            <th>Tiêu Đề</th>
+                            <th>Thuộc khóa học</th>
                             <th>Trạng thái</th>
                             <th>Cập nhật</th>
                             <th style="width: 150px">&nbsp;</th>
                         </tr>
                     </thead>
+                    @php
+                        \Carbon\Carbon::setLocale('vi');
+                    @endphp
                     <tbody>
                         @php($i = 1)
                         @foreach ($tests as $test)
                             <tr>
                                 <td>{{ $i++ }}</td>
                                 <td>{{ $test->title }}</td>
+                                <td>{{ $test->course->title }}</td>
                                 <td>
                                     @if ($test->published == 0)
                                         <span class="btn btn-danger btn-xs">NO</span>
@@ -30,10 +35,10 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($test->updated_at == NULL)
-                                    <span class="text-danger">Chưa đặt thời gian</span>
+                                    @if ($test->updated_at == null)
+                                        <span class="text-danger">Chưa đặt thời gian</span>
                                     @else
-                                    {{ $test->updated_at->diffForHumans() }}
+                                        {{ $test->updated_at->diffForHumans() }}
                                     @endif
                                 </td>
                                 <td>

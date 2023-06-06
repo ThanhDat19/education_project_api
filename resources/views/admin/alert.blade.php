@@ -9,15 +9,15 @@
 @endif
 
 @if (Session::has('error'))
-    <div class="alert alert-danger">
-        {{ Session::get('error') }}
-    </div>
+    <script>
+        toastr.error('{{ Session::get('error') }}');
+    </script>
 @endif
 
 @if (Session::has('success'))
-    <div class="alert alert-success">
-        {{ Session::get('success') }}
-    </div>
+    <script>
+        toastr.success('{{ Session::get('success') }}');
+    </script>
 @endif
 
 

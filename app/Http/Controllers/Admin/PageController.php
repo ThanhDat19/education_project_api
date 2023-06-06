@@ -46,11 +46,11 @@ class PageController extends Controller
                 'video_url' => $request->input('video_url'),
             ]);
             $home->save();
-            toastr()->success('Cập nhật trang chủ thành công');
-            // Session::flash('success', 'Cập nhật trang chủ thành công');
+            // toastr()->success('Cập nhật trang chủ thành công');
+            Session::flash('success', 'Cập nhật trang chủ thành công');
         } catch (\Exception $err) {
-            // Session::flash('error', 'Có lỗi vui lòng thử lại');
-            toastr()->error('Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            // toastr()->error('Có lỗi vui lòng thử lại');
 
         }
         return redirect()->route('pages.list');
@@ -77,11 +77,11 @@ class PageController extends Controller
                 'footer_credit' => $request->input('footer_credit'),
             ]);
             $footer->save();
-            // Session::flash('success', 'Cập nhật footer thành công');
-            toastr()->success('Cập nhật footer thành công!');
+            Session::flash('success', 'Cập nhật footer thành công');
+            // toastr()->success('Cập nhật footer thành công!');
         } catch (\Exception $err) {
-            // Session::flash('error', 'Có lỗi vui lòng thử lại');
-            toastr()->error('Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            // toastr()->error('Có lỗi vui lòng thử lại');
         }
         return redirect()->route('pages.list');
     }
@@ -104,11 +104,11 @@ class PageController extends Controller
                 'privacy' => $request->input('privacy'),
             ]);
             $information->save();
-            // Session::flash('success', 'Cập nhật footer thành công');
-            toastr()->success('Cập nhật thông tin thành công!');
+            Session::flash('success', 'Cập nhật footer thành công');
+            // toastr()->success('Cập nhật thông tin thành công!');
         } catch (\Exception $err) {
-            // Session::flash('error', 'Có lỗi vui lòng thử lại');
-            toastr()->error('Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            // toastr()->error('Có lỗi vui lòng thử lại');
         }
         return redirect()->route('pages.list');
     }

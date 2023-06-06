@@ -1,7 +1,7 @@
 $.ajaxSetup({
     headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    },
 });
 
 function removeRow(id, url) {
@@ -11,38 +11,33 @@ function removeRow(id, url) {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                $.ajax({
-                    type: 'DELETE',
-                    datatype: 'JASON',
-                    data: { id },
-                    url: url,
-                    success: function (result) {
-                        if (result.error == false) {
-                            swal(result.message)
-                            .then(() => {
-                                location.reload(true);
-                                tr.hide();
-                            });
-                        }
-                        else {
-                            swal("Xóa lỗi vui lòng Thử lại", {
-                                icon: "warning",
-                            })
-                            .then(() => {
-                                location.reload(true);
-                                tr.hide();
-                            });
-                        }
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: "DELETE",
+                datatype: "JASON",
+                data: { id },
+                url: url,
+                success: function (result) {
+                    if (result.error == false) {
+                        swal(result.message).then(() => {
+                            location.reload(true);
+                            tr.hide();
+                        });
+                    } else {
+                        swal("Xóa lỗi vui lòng Thử lại", {
+                            icon: "warning",
+                        }).then(() => {
+                            location.reload(true);
+                            tr.hide();
+                        });
                     }
-                })
-
-            } else {
-                swal("Dữ liệu của bạn đã an toàn!");
-            }
-        })
+                },
+            });
+        } else {
+            swal("Dữ liệu của bạn đã an toàn!");
+        }
+    });
 }
 function allowPost(id, url) {
     swal({
@@ -51,37 +46,32 @@ function allowPost(id, url) {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                $.ajax({
-                    type: 'POST',
-                    data: { id },
-                    url: url,
-                    success: function (result) {
-                        if (result.error == false) {
-                            swal(result.message)
-                            .then(() => {
-                                location.reload(true);
-                                tr.hide();
-                            });
-                        }
-                        else {
-                            swal("Lỗi vui lòng Thử lại", {
-                                icon: "warning",
-                            })
-                            .then(() => {
-                                location.reload(true);
-                                tr.hide();
-                            });
-                        }
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: "POST",
+                data: { id },
+                url: url,
+                success: function (result) {
+                    if (result.error == false) {
+                        swal(result.message).then(() => {
+                            location.reload(true);
+                            tr.hide();
+                        });
+                    } else {
+                        swal("Lỗi vui lòng Thử lại", {
+                            icon: "warning",
+                        }).then(() => {
+                            location.reload(true);
+                            tr.hide();
+                        });
                     }
-                })
-
-            } else {
-                swal("Bạn đã hủy thao tác!");
-            }
-        })
+                },
+            });
+        } else {
+            swal("Bạn đã hủy thao tác!");
+        }
+    });
 }
 function followPost(user, post, url) {
     $.ajax({
@@ -94,52 +84,52 @@ function followPost(user, post, url) {
                     title: "Thông báo!",
                     text: result.message,
                     type: "success",
-                    timer: 3000
-                })
-                .then(() => {
+                    timer: 3000,
+                }).then(() => {
                     location.reload(true);
                     tr.hide();
                 });
-
-            }
-            else {
+            } else {
                 swal({
                     title: "Thông báo!",
                     text: "Đã có lỗi xảy ra",
                     type: "error",
-                    timer: 3000
-                })
-                .then(() => {
+                    timer: 3000,
+                }).then(() => {
                     location.reload(true);
                     tr.hide();
                 });
             }
-        }
+        },
     });
 }
 // Upload file
-$('#upload').change(function () {
+$("#upload").change(function () {
     const form = new FormData();
-    form.append('file', $(this)[0].files[0])
+    form.append("file", $(this)[0].files[0]);
     $.ajax({
         processData: false,
         contentType: false,
-        type: 'POST',
-        datatype: 'JSON',
+        type: "POST",
+        datatype: "JSON",
         data: form,
-        url: '/upload/services',
+        url: "/upload/services",
         success: function (results) {
             if (results.error == false) {
-                $('#image_show').html('<a href="' + results.url + '" target="_blank"><img src="' + results.url + '" width="400px"></a>')
-                $('#image').val(results.url)
+                $("#image_show").html(
+                    '<a href="' +
+                        results.url +
+                        '" target="_blank"><img src="' +
+                        results.url +
+                        '" width="400px"></a>'
+                );
+                $("#image").val(results.url);
+            } else {
+                alert("Tải ảnh lỗi!");
             }
-            else {
-                alert('Tải ảnh lỗi!')
-            }
-        }
-    })
-})
-
+        },
+    });
+});
 
 // $(document).ready(function() {
 //     // Gửi request filter khi có sự thay đổi trong select box và input
