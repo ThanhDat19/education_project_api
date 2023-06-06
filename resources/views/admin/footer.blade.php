@@ -58,50 +58,35 @@
         // Lọc khóa học theo loại
         $('#course-type').change(function() {
             var selectedType = $(this).val();
-            // console.log(selectedType)
             table.columns(3).search(selectedType).draw();
         });
 
         // Lọc khóa học theo giá
-        $.fn.dataTable.ext.search.push(
-            function(settings, data, dataIndex) {
-                var minPrice = parseInt($('#min-price-input').val());
-                var maxPrice = parseInt($('#max-price-input').val());
-                var price = parseFloat(data[4]) || 0;
-                if ((minPrice == '' && maxPrice == '') ||
-                    (minPrice == '' && price <= maxPrice) ||
-                    (minPrice <= price && '' == maxPrice) ||
-                    (minPrice <= price && price <= maxPrice)) {
-                    return true;
-                }
-                return false;
-            }
-        )
-        $('#filter-price').click(function() {
+        function filterByPrice() {
             table.draw();
+        }
+
+        // Áp dụng extension search cho việc lọc theo giá
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            var minPrice = parseInt($('#min-price-input').val()) || 0;
+            var maxPrice = parseInt($('#max-price-input').val()) || Infinity;
+            var price = parseFloat(data[4]) || 0;
+
+            return price >= minPrice && price <= maxPrice;
         });
-        // $('#filter-price').click(function() {
 
-        //     // table.column(4).search((data, row) => {
-        //     //     var price = parseInt(data.replace(/\D/g,
-        //     //     console.log(true)
-        //     //         '')); // Lấy giá từ chuỗi (loại bỏ ký tự không phải số)
+        // Xử lý sự kiện khi giá tối thiểu hoặc tối đa thay đổi
+        $('#min-price-input, #max-price-input').on('keyup change', function() {
+            filterByPrice();
+        });
 
-        //     //     if ((isNaN(minPrice) || price >= minPrice) && (isNaN(maxPrice) || price <=
-        //     //             maxPrice)) {
-        //     //         console.log(true)
-        //     //         return true;
-        //     //     }
-        //     //     console.log(false)
+        // Lọc khóa học mới nhất
+        var lastTime = $('#last-time').val();
+        console.log(lastTime); // Hiển thị giá trị thời gian gần nhất trong console
 
-        //     //     return false;
-        //     // }).draw();
-        // });
-
-        // Lọc khóa học theo khóa học mới tạo
-        // $('#filter-new').click(function() {
-        //     table.columns(6).search('Chưa đặt thời gian').draw();
-        // });
+        $('#filter-new').click(function() {
+            table.columns(6).search(lastTime).draw();
+        });
     });
 </script>
 

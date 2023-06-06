@@ -36,6 +36,7 @@
                 </div>
                 @php
                     \Carbon\Carbon::setLocale('vi');
+                    $latestTime = null;
                 @endphp
 
                 <table id="myTable" class="table">
@@ -80,6 +81,10 @@
                                         <span class="text-danger">Chưa đặt thời gian</span>
                                     @else
                                         {{ $course->updated_at->diffForHumans() }}
+
+                                        <?php
+                                        $latestTime = $latestTime === null || $course->updated_at > $latestTime ? $course->updated_at : $latestTime
+                                        ?>
                                     @endif
                                 </td>
                                 <td>
@@ -97,6 +102,11 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    @if ($latestTime !== null)
+                        <input type="hidden" id="last-time" name="last_time" value="{{ $latestTime->diffForHumans() }}">
+                    @endif
+
+
                 </table>
 
                 {{ $courses->links() }}
