@@ -64,4 +64,24 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /**
+     * Kiểm tra xem người dùng có quyền cụ thể hay không.
+     *
+     * @param  string  $permission
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        // Kiểm tra logic xác định quyền ở đây
+        // Ví dụ: Kiểm tra xem người dùng có quyền $permission hay không
+        return $this->roles->flatMap->permissions->pluck('name')->contains($permission);
+    }
+
+    /**
+     * Quan hệ với bảng roles.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_users');
+    }
 }
