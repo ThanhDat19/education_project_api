@@ -139,4 +139,27 @@ class CoursesController extends Controller
         // Phản hồi cho React rằng dữ liệu đã được lưu thành công
         return response()->json(['success' => true, 'message' => 'Course created successfully', 'course' => $course]);
     }
+
+    public function teacherDeleteCourse(Courses $course)
+    {
+        try {
+            $result = false;
+            if ($course) {
+                $course->delete();
+                $result = true;
+            }
+
+            if ($result) {
+                return response()->json([
+                    'error' => false,
+                    'message' => 'Xóa khóa học thành công'
+                ]);
+            }
+        } catch (\Exception $error) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Đã có lỗi xảy ra'
+            ]);
+        }
+    }
 }
