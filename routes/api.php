@@ -80,3 +80,7 @@ Route::post('/create-payment', [PaymentController::class, 'createPayment']);
 
 //Course Student Route
 // Route::post('/get-relation-course-user', [CourseStudentController::class, 'getRelation']);
+
+//Course Teacher Route
+Route::get('/get-course-teacher', [CoursesController::class, 'teacherGetCourse']);
+Route::post('/post-course-teacher', [CoursesController::class, 'teacherPostCourse']);

@@ -77,9 +77,12 @@ class RegisterController extends Controller
             $role = Role::where('name', 'student')->first();
             $user->roles()->attach($role);
             Session::flash('success', 'Đăng ký thành công');
+            return $user;
+
         } catch (\Exception $err) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');
+            return $user;
+
         }
-        return redirect()->back();
     }
 }

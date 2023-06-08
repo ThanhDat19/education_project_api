@@ -32,9 +32,18 @@ class AuthController extends Controller
         }
 
         $user = Auth::guard('api')->user();
+        $role = $user->roles()->pluck('name')->first();
         return response()->json([
             'status' => 'success',
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'email_verified_at' => $user->email_verified_at,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+                'roles' => $role,
+            ],
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',

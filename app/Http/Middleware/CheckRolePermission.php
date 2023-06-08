@@ -31,6 +31,7 @@ class CheckRolePermission
         $hasRole = $roles->pluck('name')->contains($role);
 
         if (!$hasRole) {
+            Auth::guard('web')->logout();
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',

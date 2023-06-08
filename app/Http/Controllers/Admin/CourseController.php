@@ -37,9 +37,8 @@ class CourseController extends Controller
 
     public function store(Request $request)
     {
-
         $timestamp = Carbon::createFromFormat('d-m-Y', $request->input('start_date'))->timestamp;
-        $datetime = DateTime::createFromFormat('U', $timestamp);
+        // $datetime = DateTime::createFromFormat('U', $timestamp);
 
         try {
             Courses::create([
@@ -50,7 +49,7 @@ class CourseController extends Controller
                 "description" => $request->input('description'),
                 "price" => $request->input('price'),
                 "course_image" => $request->input('image'),
-                "start_date" => $datetime->format('Y-m-d H:i:s'),
+                "start_date" => $timestamp,
                 "published" => $request->input('published'),
             ]);
             Session::flash('success', 'Thêm khóa học mới thành công');
