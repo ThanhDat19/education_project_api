@@ -39,7 +39,7 @@ class CoursesController extends Controller
     public function onSelectDetails(Request $request, $id)
     {
         $user = User::find($request->input('user_id'));
-
+        $categories = CourseCategory::all();
         if ($user) {
             $course = Courses::where([
                 'id' => $id
@@ -53,12 +53,14 @@ class CoursesController extends Controller
             if ($courseStudent) {
                 return response()->json([
                     "data" => $course,
-                    "status" => $courseStudent->payment_status
+                    "status" => $courseStudent->payment_status,
+                    "categories" => $categories
                 ], 200);
             }
             return response()->json([
                 "data" => $course,
-                "status" => null
+                "status" => null,
+                "categories" => $categories
             ], 200);
 
         } else {
@@ -68,7 +70,8 @@ class CoursesController extends Controller
 
             return response()->json([
                 "data" => $course,
-                "status" => null
+                "status" => null,
+                "categories" => $categories
             ], 200);
         }
     }
@@ -161,5 +164,43 @@ class CoursesController extends Controller
                 'message' => 'Đã có lỗi xảy ra'
             ]);
         }
+    }
+
+    public function teacherUpdateCourse(Request $request, Courses $course)
+    {
+        // Lấy dữ liệu
+        $newCourseTitle = $request->input('title');
+        $courseCategoryId = $request->input('course_category_id');
+        $description = $request->input('description');
+        $price = $request->input('price');
+        $user_id = $request->input('user_id');
+        $dateString = $request->input('start_date');
+
+        $timestamp = strtotime($dateString);
+        $dateTime = date('Y-m-d H:i:s', $timestamp);
+        $course->instructor = $user_id;
+        $course->course_category_id = $courseCategoryId;
+        $course->title = $newCourseTitle;
+        $course->slug = Str::slug($request->input('title'), '-');
+        $course->description = $description;
+        $course->price = $price;
+        $course->start_date = $dateTime;
+
+        if ($course->course_image != $request->input('image')) {
+            if ($request->hasFile('image')) {
+                $name = $request->file('image')->getClientOriginalName();
+
+                $pathFull = 'uploads/' . date("Y/m/d");
+                $path = $request->file('image')->storeAs(
+                    'public/' . $pathFull,
+                    $name
+                );
+                $course->course_image = '/storage/' . $pathFull . '/' . $name;
+            }
+        }
+
+        $course->save();
+
+        return response()->json(['success' => true, 'message' => 'Course update successfully', 'course' => $course]);
     }
 }

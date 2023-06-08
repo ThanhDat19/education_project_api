@@ -85,3 +85,4 @@ Route::post('/create-payment', [PaymentController::class, 'createPayment']);
 Route::get('/get-course-teacher', [CoursesController::class, 'teacherGetCourse']);
 Route::post('/post-course-teacher', [CoursesController::class, 'teacherPostCourse']);
 Route::delete('/delete-course-teacher/{course}', [CoursesController::class, 'teacherDeleteCourse']);
+Route::post('/update-course-teacher/{course}', [CoursesController::class, 'teacherUpdateCourse']);
