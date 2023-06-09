@@ -75,6 +75,7 @@ Route::get('/course-details/{id}/learn', [LessonController::class, 'getListLesso
 //Test Route
 Route::get('/tests/{lesson}', [TestController::class, 'getTest']);
 Route::post('/tests/{lesson}/{user}', [TestController::class, 'takeTest']);
+Route::post('/tests-result/{user}/{test}', [TestController::class, 'getResult']);
 //Payment Route
 Route::post('/create-payment', [PaymentController::class, 'createPayment']);
 

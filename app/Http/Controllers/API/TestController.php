@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use App\Models\Test;
 use App\Models\TestResult;
 use App\Models\TestResultAnswer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -22,62 +23,84 @@ class TestController extends Controller
     {
 
         $data = $request->input();
+
         // Xử lý dữ liệu và tính điểm
         $testId = $data['test_id'];
-        $userID = $data['user_id'];
+        $userId = $data['user_id'];
         $answers = $data['answers'];
 
         $totalScore = 0;
 
-
         foreach ($answers as $answer) {
             $questionId = $answer['question_id'];
-            $correct = $answer['correct'];
-            $score = $answer['score'];
+            $multiAnswer = $answer['multi_answer'];
+            $optionChoose = $answer['option_choose'];
 
-            // Kiểm tra câu trả lời đúng và cộng điểm tương ứng
-            if ($correct) {
-                $totalScore += $score; // Cộng điểm của câu trả lời đúng
+            $isCorrect = true;
+
+            if ($multiAnswer) {
+                // Xử lý cho câu hỏi cho phép chọn nhiều đáp án
+                foreach ($optionChoose as $option) {
+                    if ($option['checked'] && !$option['correct']) {
+                        $isCorrect = false;
+                        break;
+                    }
+                }
             } else {
-                $totalScore += 0; // Không cộng điểm cho câu trả lời sai
+                // Xử lý cho câu hỏi chỉ cho phép chọn một đáp án
+                $selectedOption = reset($optionChoose);
+                if (!$selectedOption['checked'] || !$selectedOption['correct']) {
+                    $isCorrect = false;
+                }
+            }
+
+            if ($isCorrect) {
+                $totalScore += $answer['score'];
             }
         }
 
-        TestResult::create([
-            'test_id' => $testId,
-            'user_id' => $userID,
-            'test_result' => $totalScore
-        ]);
+        // Lưu thông tin kết quả kiểm tra vào bảng TestResult
+        $testResult = new TestResult();
+        $testResult->test_id = $testId;
+        $testResult->user_id = $userId;
+        $testResult->test_result = $totalScore;
+        $testResult->save();
 
-        //Lấy kết quả kiểm tra mới thêm vào csdl
-        $testResult = TestResult::where([
-            'test_id' => $testId,
-            'user_id' => $userID,
-        ])->first();
+        // Lưu từng câu trả lời vào bảng TestResultAnswer
+        foreach ($data['answers'] as $answer) {
+            $testResultAnswer = new TestResultAnswer();
+            $testResultAnswer->test_result_id = $testResult->id;
+            $testResultAnswer->question_id = $answer['question_id'];
+            $testResultAnswer->score = $answer['score'];
 
-        $data = '';
-        //Thêm chi tiết kết quả kiểm tra
-        foreach ($answers as $answer) {
+            // Kiểm tra nếu có lựa chọn được chọn (checked) thì lưu vào bảng
+            if (isset($answer['option_choose']) && !empty($answer['option_choose'])) {
+                foreach ($answer['option_choose'] as $option) {
+                    if ($option['checked']) {
+                        $testResultAnswer->question_option_id = $option['option_id'];
+                        $testResultAnswer->correct = $option['correct'];
+                    }
+                }
+            }
 
-            $questionId = $answer['question_id'];
-            $correct = $answer['correct'];
-            $score = $answer['score'];
-            $optionId = $answer['option_id'];
-
-            // Kiểm tra câu trả lời đúng và cộng điểm tương ứng
-            $data = TestResultAnswer::create([
-                'test_result_id' => $testResult->id,
-                'question_id' => $questionId,
-                'question_option_id' => $optionId,
-                'correct' => $correct,
-                'score' => $score,
-            ]);
+            $testResultAnswer->save();
         }
+
         // Trả về kết quả xử lý
         return response()->json([
             'data' => $data,
             'total_score' => $totalScore
         ], 200);
 
+    }
+
+    public function getResult(User $user, Test $test){
+        $testResult = TestResult::where([
+            'user_id'=> $user->id,
+            'test_id'=> $test->id,
+        ])->first();
+        return response()->json([
+            'result' => $testResult,
+        ], 200);
     }
 }

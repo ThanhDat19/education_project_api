@@ -20,6 +20,7 @@ class QuestionResource extends JsonResource
                 "question"=> $this->question,
                 "question_image"=>$this->question_image,
                 "score"=>$this->score,
+                "multi_answer"=>$this->multi_answer,
                 "created_at"=> $this->created_at,
                 "updated_at"=> $this->updated_at,
                 "deleted_at"=>null,

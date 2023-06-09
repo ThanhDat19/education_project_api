@@ -1,5 +1,10 @@
 @extends('admin.main')
 @section('head')
+    <style>
+        .question-image {
+            max-width: 100px;
+        }
+    </style>
 @endsection
 @section('contents')
     <form action="" method="post">
