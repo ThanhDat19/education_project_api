@@ -16,8 +16,8 @@ class TestResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "course_id" => $this->course_id,
-            "lesson_id" => $this->lesson_id,
+            "course" => $this->course,
+            "lesson" => $this->lesson,
             "title" => $this->title,
             "description" => $this->description,
             "published" => $this->published,

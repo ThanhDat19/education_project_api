@@ -24,4 +24,8 @@ class Lesson extends Model
     public function course(){
         return $this->belongsTo(Courses::class, 'id', 'course_id');
     }
+
+    public function tests(){
+        return $this->hasMany(Test::class, 'lesson_id');
+    }
 }

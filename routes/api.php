@@ -9,6 +9,7 @@ use App\Http\Controllers\API\CoursesController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\TestController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\QuestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -87,3 +88,11 @@ Route::get('/get-course-teacher', [CoursesController::class, 'teacherGetCourse']
 Route::post('/post-course-teacher', [CoursesController::class, 'teacherPostCourse']);
 Route::delete('/delete-course-teacher/{course}', [CoursesController::class, 'teacherDeleteCourse']);
 Route::post('/update-course-teacher/{course}', [CoursesController::class, 'teacherUpdateCourse']);
+//Test Teacher Route
+Route::get('/get-tests-teacher/{user}', [TestController::class, 'teacherGetTests']);
+Route::post('/post-tests-teacher', [TestController::class, 'teacherPostTests']);
+Route::delete('/delete-tests-teacher/{test}', [TestController::class, 'teacherDeleteTest']);
+Route::put('/update-tests-teacher/{test}', [TestController::class, 'teacherUpdateTest']);
+
+
+Route::get('/get-questions-teacher/{user}', [QuestionController::class, 'getQuestions']);

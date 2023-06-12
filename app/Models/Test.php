@@ -26,4 +26,9 @@ class Test extends Model
     {
         return $this->belongsTo(Courses::class, 'course_id', 'id');
     }
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class, 'lesson_id', 'id');
+    }
 }

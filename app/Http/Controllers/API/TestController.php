@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\QuestionResource;
 use App\Http\Resources\TestResource;
 use App\Models\Lesson;
 use App\Models\Test;
@@ -94,13 +95,135 @@ class TestController extends Controller
 
     }
 
-    public function getResult(User $user, Test $test){
+    public function getResult(User $user, Test $test)
+    {
         $testResult = TestResult::where([
-            'user_id'=> $user->id,
-            'test_id'=> $test->id,
+            'user_id' => $user->id,
+            'test_id' => $test->id,
         ])->first();
         return response()->json([
             'result' => $testResult,
         ], 200);
+    }
+
+    public function teacherGetTests(Request $request, User $user)
+    {
+        $perPage = 6; // Number of tests per page
+        $page = $request->page; // Current page
+
+        $courses = $user->courses; // Get the list of courses for the user
+        $tests = [];
+
+        foreach ($courses as $course) {
+            foreach ($course->lessons as $lesson) {
+                foreach ($lesson->tests as $test) {
+                    $testData = new TestResource($test);
+                    $questions = $test->questions->map(function ($question) {
+                        return new QuestionResource($question);
+                    });
+
+                    $testData['questions'] = $questions;
+
+                    $tests[] = $testData;
+                }
+            }
+        }
+
+        $paginatedTests = array_slice($tests, ($page - 1) * $perPage, $perPage);
+        $totalTests = count($tests);
+        $totalPages = ceil($totalTests / $perPage);
+
+        return response()->json([
+            'tests' => $paginatedTests,
+            'total_pages' => $totalPages,
+            'courses' => $courses,
+            'user' => $user->id
+        ], 200);
+    }
+
+    public function teacherPostTests(Request $request)
+    {
+        try {
+            // Lấy dữ liệu từ request
+            $data = $request->validate([
+                'title' => 'required|string',
+                'course_id' => 'required|integer',
+                'lesson_id' => 'required|integer',
+                'description' => 'required|string',
+            ]);
+
+            // Tạo bài kiểm tra mới
+            $test = Test::create([
+                'title' => $data['title'],
+                'course_id' => $data['course_id'],
+                'lesson_id' => $data['lesson_id'],
+                'description' => $data['description'],
+                'published' => 0,
+            ]);
+
+            $test->save();
+
+        } catch (\Exception $error) {
+            return response()->json([
+                'message' => 'Thêm bài kiểm tra mới thất bại'
+            ], 401);
+        }
+    }
+
+    public function teacherDeleteTest(Test $test)
+    {
+        try {
+            $result = false;
+            if ($test) {
+                $test->delete();
+                $result = true;
+            }
+
+            if ($result) {
+                return response()->json([
+                    'error' => false,
+                    'message' => 'Xóa bài kiểm tra thành công'
+                ], 200);
+            }
+        } catch (\Exception $error) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Đã có lỗi xảy ra'
+            ], 401);
+        }
+    }
+
+    public function teacherUpdateTest(Request $request, Test $test)
+    {
+
+
+
+        try {
+            // Lấy dữ liệu từ request
+            $data = $request->validate([
+                'title' => 'required|string',
+                'description' => 'required|string',
+                'selectedQuestions' => 'required|array',
+            ]);
+
+            $test->fill([
+                'title' => $data['title'],
+                'description' => $data['description'],
+            ]);
+            $test->save();
+
+            // Cập nhật danh sách câu hỏi
+            $questions = $request->input('selectedQuestions', []);
+            $test->questions()->sync($questions);
+            return response()->json([
+                'message' => 'Cập nhật bài kiểm tra thành công',
+                'request' => $request->input(),
+            ], 200);
+        } catch (\Exception $err) {
+            return response()->json([
+                'message' => 'Có lỗi vui lòng thử lại',
+                'request' => $request->input(),
+            ], 401);
+        }
     }
 }
