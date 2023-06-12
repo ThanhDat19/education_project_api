@@ -11,6 +11,6 @@ class TestResult extends Model
     protected $fillable = [
         'test_id',
         'user_id',
-        'test_result'
+        'test_result',
     ];
 }
