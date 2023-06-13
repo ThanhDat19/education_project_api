@@ -97,3 +97,6 @@ Route::put('/update-tests-teacher/{test}', [TestController::class, 'teacherUpdat
 
 Route::get('/get-questions-teacher/{user}', [QuestionController::class, 'getQuestions']);
 Route::post('/post-questions-teacher', [QuestionController::class, 'postQuestions']);
+Route::get('/get-question-detail/{question}', [QuestionController::class, 'getQuestionDetail']);
+Route::post('/update-questions-teacher/{question}', [QuestionController::class, 'updateQuestions']);
+Route::delete('/delete-questions-teacher/{question}', [QuestionController::class, 'deleteQuestion']);

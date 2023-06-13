@@ -28,4 +28,9 @@ class Question extends Model
         return $this->belongsToMany(Test::class, 'test_questions');
     }
 
+    public function type()
+    {
+        return $this->belongsTo(QuestionType::class, 'question_type_id', 'id');
+    }
+
 }
