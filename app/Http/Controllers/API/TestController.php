@@ -195,15 +195,12 @@ class TestController extends Controller
 
     public function teacherUpdateTest(Request $request, Test $test)
     {
-
-
-
         try {
             // Lấy dữ liệu từ request
             $data = $request->validate([
                 'title' => 'required|string',
                 'description' => 'required|string',
-                'selectedQuestions' => 'required|array',
+                'selectedQuestions' => 'array',
             ]);
 
             $test->fill([

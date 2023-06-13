@@ -82,21 +82,24 @@ class CoursesController extends Controller
         $page = $request->page; // Current page
 
         $user = User::find($request->user_id);
-        $roles = $user->roles;
-        $teacherRole = $roles->firstWhere('name', 'teacher');
-        $categories = CourseCategory::all();
+        if ($user) {
+            $roles = $user->roles;
+            $teacherRole = $roles->firstWhere('name', 'teacher');
+            $categories = CourseCategory::all();
 
-        if ($teacherRole) {
-            $courses = Courses::where('instructor', $user->id)->paginate($perPage, ['*'], 'page', $page);
-            $totalPages = $courses->lastPage(); // Use lastPage() method instead of accessing the protected property
+            if ($teacherRole) {
+                $courses = Courses::where('instructor', $user->id)->paginate($perPage, ['*'], 'page', $page);
+                $totalPages = $courses->lastPage(); // Use lastPage() method instead of accessing the protected property
 
-            return response()->json([
-                "total_pages" => $totalPages,
-                "courses" => $courses,
-                "request" => $request->input(),
-                "categories" => $categories,
-            ]);
+                return response()->json([
+                    "total_pages" => $totalPages,
+                    "courses" => $courses,
+                    "request" => $request->input(),
+                    "categories" => $categories,
+                ]);
+            }
         }
+
         return response()->json([
             'status' => 'error',
             'message' => 'Unauthorized',

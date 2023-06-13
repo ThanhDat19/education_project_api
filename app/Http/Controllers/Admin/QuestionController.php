@@ -32,15 +32,14 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-        Question::create([
-            "question_type_id" => $request->input('question_type_id'),
-            "question" => $request->input('question'),
-            "score" => $request->input('score'),
-            "question_image" => $request->input('question_image'),
-            "multi_answer" => $request->input('multi_answer'),
-        ]);
-
         try {
+            Question::create([
+                "question_type_id" => $request->input('question_type_id'),
+                "question" => $request->input('question'),
+                "score" => $request->input('score'),
+                "question_image" => $request->input('question_image'),
+                "multi_answer" => $request->input('multi_answer'),
+            ]);
 
             Session::flash('success', 'Thêm câu hỏi mới thành công');
         } catch (Exception $error) {
@@ -108,8 +107,7 @@ class QuestionController extends Controller
         $questions = null;
         if ($questionTypeId) {
             $questions = Question::where('question_type_id', $questionTypeId)->get();
-        }
-        else{
+        } else {
             $questions = Question::all();
         }
 
