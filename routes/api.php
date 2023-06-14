@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CourseStudentController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\TodoController;
@@ -104,3 +105,9 @@ Route::delete('/delete-questions-teacher/{question}', [QuestionController::class
 //Lesson Student Route
 Route::post('/get-lessons-student/{user}', [LessonController::class, 'getLessonOfStudent']);
 Route::post('/update-lessons-student/{user}', [LessonController::class, 'updateLessonOfStudent']);
+
+//Comment Route
+Route::get('/get-comments-lesson/{user}', [CommentController::class, 'getComments']);
+Route::post('/post-comments-lesson/{user}', [CommentController::class, 'postComments']);
+Route::put('/put-comments-lesson/{user}/{comment}', [CommentController::class, 'putComments']);
+Route::delete('/delete-comments-lesson/{user}/{comment}', [CommentController::class, 'deleteComments']);

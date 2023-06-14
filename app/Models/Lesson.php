@@ -36,4 +36,9 @@ class Lesson extends Model
         return $this->belongsToMany(User::class, 'lesson_students')
             ->withTimestamps();
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'lesson_id', 'id');
+    }
 }
