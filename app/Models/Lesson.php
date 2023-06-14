@@ -21,11 +21,19 @@ class Lesson extends Model
         'free_lesson',
     ];
 
-    public function course(){
+    public function course()
+    {
         return $this->belongsTo(Courses::class, 'id', 'course_id');
     }
 
-    public function tests(){
+    public function tests()
+    {
         return $this->hasMany(Test::class, 'lesson_id');
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'lesson_students')
+            ->withTimestamps();
     }
 }

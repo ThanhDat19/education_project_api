@@ -94,9 +94,13 @@ Route::post('/post-tests-teacher', [TestController::class, 'teacherPostTests']);
 Route::delete('/delete-tests-teacher/{test}', [TestController::class, 'teacherDeleteTest']);
 Route::put('/update-tests-teacher/{test}', [TestController::class, 'teacherUpdateTest']);
 
-
+//Question Teacher Route
 Route::get('/get-questions-teacher/{user}', [QuestionController::class, 'getQuestions']);
 Route::post('/post-questions-teacher', [QuestionController::class, 'postQuestions']);
 Route::get('/get-question-detail/{question}', [QuestionController::class, 'getQuestionDetail']);
 Route::post('/update-questions-teacher/{question}', [QuestionController::class, 'updateQuestions']);
 Route::delete('/delete-questions-teacher/{question}', [QuestionController::class, 'deleteQuestion']);
+
+//Lesson Student Route
+Route::post('/get-lessons-student/{user}', [LessonController::class, 'getLessonOfStudent']);
+Route::post('/update-lessons-student/{user}', [LessonController::class, 'updateLessonOfStudent']);
