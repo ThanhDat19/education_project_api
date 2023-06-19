@@ -8,6 +8,7 @@ use App\Models\HomePage;
 use App\Models\Information;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
 {
@@ -37,6 +38,22 @@ class PageController extends Controller
 
     public function homeEdit(Request $request, HomePage $home)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'home_title' => 'required',
+            'home_subtitle' => 'required',
+            'tech_description' => 'required',
+            'video_description' => 'required',
+            'video_url' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
             $home->fill([
                 'home_title' => $request->input('home_title'),
@@ -46,13 +63,11 @@ class PageController extends Controller
                 'video_url' => $request->input('video_url'),
             ]);
             $home->save();
-            // toastr()->success('Cập nhật trang chủ thành công');
             Session::flash('success', 'Cập nhật trang chủ thành công');
         } catch (\Exception $err) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
-            // toastr()->error('Có lỗi vui lòng thử lại');
-
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
+
         return redirect()->route('pages.list');
     }
 
@@ -66,6 +81,24 @@ class PageController extends Controller
 
     public function footerEdit(Request $request, Footer $footer)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'address' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'facebook' => 'required|url',
+            'youtube' => 'required|url',
+            'twitter' => 'required|url',
+            'footer_credit' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
             $footer->fill([
                 'address' => $request->input('address'),
@@ -78,11 +111,10 @@ class PageController extends Controller
             ]);
             $footer->save();
             Session::flash('success', 'Cập nhật footer thành công');
-            // toastr()->success('Cập nhật footer thành công!');
         } catch (\Exception $err) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
-            // toastr()->error('Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
+
         return redirect()->route('pages.list');
     }
 
@@ -96,6 +128,21 @@ class PageController extends Controller
 
     public function informationEdit(Request $request, Information $information)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'about' => 'required',
+            'refund' => 'required',
+            'terms' => 'required',
+            'privacy' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
             $information->fill([
                 'about' => $request->input('about'),
@@ -104,12 +151,11 @@ class PageController extends Controller
                 'privacy' => $request->input('privacy'),
             ]);
             $information->save();
-            Session::flash('success', 'Cập nhật footer thành công');
-            // toastr()->success('Cập nhật thông tin thành công!');
+            Session::flash('success', 'Cập nhật thông tin thành công');
         } catch (\Exception $err) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
-            // toastr()->error('Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
+
         return redirect()->route('pages.list');
     }
 }

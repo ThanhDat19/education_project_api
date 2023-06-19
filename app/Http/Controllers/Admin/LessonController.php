@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class LessonController extends Controller
 {
@@ -49,13 +50,13 @@ class LessonController extends Controller
 
         if (preg_match($reptms, $input, $matches)) {
             if (isset($matches[1])) {
-                $hours = (int)$matches[1];
+                $hours = (int) $matches[1];
             }
             if (isset($matches[2])) {
-                $minutes = (int)$matches[2];
+                $minutes = (int) $matches[2];
             }
             if (isset($matches[3])) {
-                $seconds = (int)$matches[3];
+                $seconds = (int) $matches[3];
             }
             $totalseconds = $hours * 3600 + $minutes * 60 + $seconds;
         }
@@ -66,24 +67,40 @@ class LessonController extends Controller
 
     public function store(Request $request, Courses $course)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'video_url' => 'required',
+            'short_text' => 'required',
+            'full_text' => 'required',
+            'position' => 'required',
+            'free_lesson' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $timeCode = $this->youTubeController->getVideoDuration($request->input('video_url'))->duration;
         // dd($this->getTime($timeCode));
         Lesson::create([
-            "course_id" => $course->id,
-            "title" => $request->input('title'),
-            "video_url" => $request->input('video_url'),
-            "short_text" => $request->input('short_text'),
-            "video_time" => $this->getTime($timeCode),
-            "full_text" => $request->input('full_text'),
-            "position" => $request->input('position'),
-            "free_lesson" => $request->input('free_lesson')
+            'course_id' => $course->id,
+            'title' => $request->input('title'),
+            'video_url' => $request->input('video_url'),
+            'short_text' => $request->input('short_text'),
+            'video_time' => $this->getTime($timeCode),
+            'full_text' => $request->input('full_text'),
+            'position' => $request->input('position'),
+            'free_lesson' => $request->input('free_lesson'),
         ]);
 
         try {
-
             Session::flash('success', 'Thêm Bài học mới thành công');
         } catch (Exception $error) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
         return redirect()->route('course.lesson', ['course' => $course->id]);
     }
@@ -99,18 +116,34 @@ class LessonController extends Controller
 
     public function update(Request $request, Lesson $lesson, Courses $course)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
 
-        $lesson->fill([
-            "course_id" => $course->id,
-            "title" => $request->input('title'),
-            "video_url" => $request->input('video_url'),
-            "short_text" => $request->input('short_text'),
-            "full_text" => $request->input('full_text'),
-            "position" => $request->input('position'),
-            "free_lesson" => $request->input('free_lesson')
-        ]);
-        $lesson->save();
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'video_url' => 'required',
+            'short_text' => 'required',
+            'full_text' => 'required',
+            'position' => 'required',
+            'free_lesson' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
+            $lesson->fill([
+                "course_id" => $course->id,
+                "title" => $request->input('title'),
+                "video_url" => $request->input('video_url'),
+                "short_text" => $request->input('short_text'),
+                "full_text" => $request->input('full_text'),
+                "position" => $request->input('position'),
+                "free_lesson" => $request->input('free_lesson')
+            ]);
+            $lesson->save();
             Session::flash('success', 'Cập nhật bài học thành công');
         } catch (\Exception $err) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');

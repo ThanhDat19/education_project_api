@@ -9,6 +9,7 @@ use App\Models\Test;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -32,6 +33,22 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'question_type_id' => 'required',
+            'question' => 'required',
+            'score' => 'required',
+            'question_image' => 'required',
+            'multi_answer' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
             Question::create([
                 "question_type_id" => $request->input('question_type_id'),
@@ -45,6 +62,7 @@ class QuestionController extends Controller
         } catch (Exception $error) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');
         }
+
         return redirect()->back();
     }
 
@@ -61,15 +79,31 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        $question->fill([
-            "question_type_id" => $request->input('question_type_id'),
-            "question" => $request->input('question'),
-            "score" => $request->input('score'),
-            "question_image" => $request->input('question_image'),
-            "multi_answer" => $request->input('multi_answer'),
-        ]);
-        $question->save();
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'question_type_id' => 'required',
+            'question' => 'required',
+            'score' => 'required',
+            'question_image' => 'required',
+            'multi_answer' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
+            $question->fill([
+                "question_type_id" => $request->input('question_type_id'),
+                "question" => $request->input('question'),
+                "score" => $request->input('score'),
+                "question_image" => $request->input('question_image'),
+                "multi_answer" => $request->input('multi_answer'),
+            ]);
+            $question->save();
             Session::flash('success', 'Cập nhật câu hỏi thành công');
         } catch (\Exception $err) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');

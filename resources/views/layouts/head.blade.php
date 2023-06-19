@@ -5,7 +5,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ !empty($title) ? $title : 'Tìm Đồ KDV' }}</title>
+    <title>{{ !empty($title) ? $title : 'Học Tập Trực Tuyến' }}</title>
     <link rel="shortcut icon" href="{{ asset('template/assets/images/logo/favicon.svg') }}" type="image/x-icon" />
     <link rel="shortcut icon" href="{{ asset('template/assets/images/logo/favicon.png') }}" type="image/png" />
 

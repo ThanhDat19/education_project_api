@@ -7,6 +7,7 @@ use App\Models\QuestionType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionTypeController extends Controller
 {
@@ -28,15 +29,28 @@ class QuestionTypeController extends Controller
 
     public function store(Request $request)
     {
-        QuestionType::create([
-            "name" => $request->input('name'),
-        ]);
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         try {
+            QuestionType::create([
+                "name" => $request->input('name'),
+            ]);
+
             Session::flash('success', 'Thêm lĩnh vực mới thành công');
         } catch (Exception $error) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');
         }
+
         return redirect()->back();
     }
 
@@ -51,11 +65,24 @@ class QuestionTypeController extends Controller
 
     public function update(Request $request, QuestionType $type)
     {
-        $type->fill([
-            "name" => $request->input('name'),
-        ]);
-        $type->save();
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
+            $type->fill([
+                "name" => $request->input('name'),
+            ]);
+            $type->save();
+
             Session::flash('success', 'Cập nhật lĩnh vực thành công');
         } catch (\Exception $err) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');

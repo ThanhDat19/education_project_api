@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Question;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -41,9 +42,34 @@ class QuestionController extends Controller
     public function postQuestions(Request $request)
     {
 
-        try {
-            $question = new Question();
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'integer' => 'Trường :attribute phải là số nguyên.',
+            'string' => 'Trường :attribute phải là chuỗi.',
+            'image' => 'Trường :attribute phải là hình ảnh.',
+            'mimes' => 'Trường :attribute phải có định dạng: :values.',
+            'max' => 'Trường :attribute không được vượt quá :max kilobytes.',
+            // Các thông báo lỗi khác tùy theo quy tắc xác thực bạn muốn áp dụng
+        ];
 
+        $validator = Validator::make($request->all(), [
+            'question_type_id' => 'required|integer',
+            'question' => 'required|string',
+            'score' => 'required|integer',
+            // 'multi_answer' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'options' => 'required',
+            'options.*.content' => 'required|string',
+            'options.*.isCorrect' => 'boolean',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        try {
+            // Lấy dữ liệu từ request
+            $question = new Question();
             $question->question_type_id = $request->input('question_type_id');
             $question->question = $request->input('question');
             $question->score = $request->input('score');
@@ -51,7 +77,6 @@ class QuestionController extends Controller
 
             if ($request->hasFile('image')) {
                 $name = $request->file('image')->getClientOriginalName();
-
                 $pathFull = 'uploads/' . date("Y/m/d");
                 $path = $request->file('image')->storeAs(
                     'public/' . $pathFull,
@@ -72,14 +97,15 @@ class QuestionController extends Controller
                 $questionOption->correct = $option['isCorrect'] ? 1 : 0;
                 $questionOption->save();
             }
+
+            return response()->json([
+                'message' => 'Thêm mới thành công',
+                'question' => $question
+            ], 200);
         } catch (Exception $error) {
             // Handle the error
             return response()->json(['error' => 'An error occurred'], 500);
         }
-        return response()->json([
-            'request' => $request->input(),
-            'message' => 'Thêm mới thành công'
-        ], 200);
     }
     public function getQuestionDetail(Question $question)
     {
@@ -97,7 +123,35 @@ class QuestionController extends Controller
 
     public function updateQuestions(Request $request, Question $question)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'integer' => 'Trường :attribute phải là số nguyên.',
+            'string' => 'Trường :attribute phải là chuỗi.',
+            'boolean' => 'Trường :attribute phải là true hoặc false.',
+            'image' => 'Trường :attribute phải là hình ảnh.',
+            'mimes' => 'Trường :attribute phải có định dạng: :values.',
+            'max' => 'Trường :attribute không được vượt quá :max kilobytes.',
+            // Các thông báo lỗi khác tùy theo quy tắc xác thực bạn muốn áp dụng
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'question_type_id' => 'required|integer',
+            'question' => 'required|string',
+            'score' => 'required|integer',
+            // 'multi_answer' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'options' => 'required',
+            'options.*.content' => 'required|string',
+            'options.*.isCorrect' => 'boolean',
+            'options_length' => 'required|integer|min:1',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         try {
+            // Lấy dữ liệu từ request
             $question->question_type_id = $request->input('question_type_id');
             $question->question = $request->input('question');
             $question->score = $request->input('score');
@@ -105,7 +159,6 @@ class QuestionController extends Controller
 
             if ($request->hasFile('image')) {
                 $name = $request->file('image')->getClientOriginalName();
-
                 $pathFull = 'uploads/' . date("Y/m/d");
                 $path = $request->file('image')->storeAs(
                     'public/' . $pathFull,
@@ -115,9 +168,8 @@ class QuestionController extends Controller
             }
 
             $question->save();
-            if (
-                $request->input('options_length') > 1
-            ) {
+
+            if ($request->input('options_length') > 1) {
                 $options = json_decode($request->input('options'), true);
 
                 foreach ($options as $option) {
@@ -129,14 +181,14 @@ class QuestionController extends Controller
                 }
             }
 
+            return response()->json([
+                'message' => 'Edit thành công',
+                'question' => $question
+            ], 200);
         } catch (Exception $error) {
             // Handle the error
             return response()->json(['error' => 'An error occurred'], 500);
         }
-        return response()->json([
-            'request' => $request->input(),
-            'message' => 'Edit thành công'
-        ], 200);
     }
 
     public function deleteQuestion(Question $question)

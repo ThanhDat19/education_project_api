@@ -8,6 +8,7 @@ use App\Models\QuestionOption;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class OptionController extends Controller
 {
@@ -31,18 +32,32 @@ class OptionController extends Controller
 
     public function store(Request $request, Question $question)
     {
-        QuestionOption::create([
-            'question_id' => $question->id,
-            'option_text' => $request->input('option_text'),
-            'correct' => $request->input('correct'),
-        ]);
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'boolean' => 'Trường :attribute phải là true hoặc false.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'option_text' => 'required',
+            'correct' => 'required|boolean',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         try {
+            QuestionOption::create([
+                'question_id' => $question->id,
+                'option_text' => $request->input('option_text'),
+                'correct' => $request->input('correct'),
+            ]);
 
             Session::flash('success', 'Thêm lựa chọn mới thành công');
         } catch (Exception $error) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
+
         return redirect()->route('question.options', ['question' => $question->id]);
     }
 
@@ -58,6 +73,20 @@ class OptionController extends Controller
 
     public function update(Request $request, QuestionOption $option, Question $question)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'boolean' => 'Trường :attribute phải là true hoặc false.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'option_text' => 'required',
+            'correct' => 'required|boolean',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         try {
             $option->fill([
                 'question_id' => $question->id,

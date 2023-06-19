@@ -11,6 +11,7 @@ use App\Models\TestResult;
 use App\Models\TestResultAnswer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TestController extends Controller
 {
@@ -101,9 +102,15 @@ class TestController extends Controller
             'user_id' => $user->id,
             'test_id' => $test->id,
         ])->first();
-        return response()->json([
-            'result' => $testResult,
-        ], 200);
+        if ($testResult) {
+            return response()->json([
+                'result' => $testResult,
+            ], 200);
+        }else {
+            return response()->json([
+                'result' => null,
+            ], 200);
+        }
     }
 
     public function teacherGetTests(Request $request, User $user)

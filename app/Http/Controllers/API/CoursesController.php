@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
 {
@@ -108,42 +109,66 @@ class CoursesController extends Controller
 
     public function teacherPostCourse(Request $request)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'integer' => 'Trường :attribute phải là số nguyên.',
+            'string' => 'Trường :attribute phải là chuỗi.',
+        ];
 
-        // Lấy dữ liệu
-        $newCourseTitle = $request->input('newCourseTitle');
-        $courseCategoryId = $request->input('courseCategoryId');
-        $description = $request->input('description');
-        $price = $request->input('price');
-        $user_id = $request->input('user_id');
-        $dateString = $request->input('start_date');
+        $validator = Validator::make($request->all(), [
+            'newCourseTitle' => 'required|string',
+            'courseCategoryId' => 'required|integer',
+            'description' => 'required|string',
+            'price' => 'required',
+            'user_id' => 'required|integer',
+            'start_date' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], $customMessages);
 
-        $timestamp = strtotime($dateString);
-        $dateTime = date('Y-m-d H:i:s', $timestamp);
-        // $datetime = DateTime::createFromFormat('U', $timestamp);
-        // Lưu dữ liệu vào CSDL
-        $course = new Courses();
-        $course->instructor = $user_id;
-        $course->course_category_id = $courseCategoryId;
-        $course->title = $newCourseTitle;
-        $course->slug = Str::slug($request->input('newCourseTitle'), '-');
-        $course->description = $description;
-        $course->price = $price;
-        $course->published = false;
-        $course->start_date = $dateTime;
-        if ($request->hasFile('image')) {
-            $name = $request->file('image')->getClientOriginalName();
-
-            $pathFull = 'uploads/' . date("Y/m/d");
-            $path = $request->file('image')->storeAs(
-                'public/' . $pathFull,
-                $name
-            );
-            $course->course_image = '/storage/' . $pathFull . '/' . $name;
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()]);
         }
-        $course->save();
 
-        // Phản hồi cho React rằng dữ liệu đã được lưu thành công
-        return response()->json(['success' => true, 'message' => 'Course created successfully', 'course' => $course]);
+        try {
+            // Lấy dữ liệu từ request
+            $newCourseTitle = $request->input('newCourseTitle');
+            $courseCategoryId = $request->input('courseCategoryId');
+            $description = $request->input('description');
+            $price = $request->input('price');
+            $user_id = $request->input('user_id');
+            $dateString = $request->input('start_date');
+
+            $timestamp = strtotime($dateString);
+            $dateTime = date('Y-m-d H:i:s', $timestamp);
+
+            // Lưu dữ liệu vào CSDL
+            $course = new Courses();
+            $course->instructor = $user_id;
+            $course->course_category_id = $courseCategoryId;
+            $course->title = $newCourseTitle;
+            $course->slug = Str::slug($newCourseTitle, '-');
+            $course->description = $description;
+            $course->price = $price;
+            $course->published = false;
+            $course->start_date = $dateTime;
+
+            if ($request->hasFile('image')) {
+                $name = $request->file('image')->getClientOriginalName();
+                $pathFull = 'uploads/' . date("Y/m/d");
+                $path = $request->file('image')->storeAs(
+                    'public/' . $pathFull,
+                    $name
+                );
+                $course->course_image = '/storage/' . $pathFull . '/' . $name;
+            }
+
+            $course->save();
+
+            // Phản hồi cho React rằng dữ liệu đã được lưu thành công
+            return response()->json(['success' => true, 'message' => 'Course created successfully', 'course' => $course]);
+        } catch (Exception $error) {
+            return response()->json(['success' => false, 'message' => 'Có lỗi vui lòng thử lại']);
+        }
     }
 
     public function teacherDeleteCourse(Courses $course)
@@ -171,39 +196,67 @@ class CoursesController extends Controller
 
     public function teacherUpdateCourse(Request $request, Courses $course)
     {
-        // Lấy dữ liệu
-        $newCourseTitle = $request->input('title');
-        $courseCategoryId = $request->input('course_category_id');
-        $description = $request->input('description');
-        $price = $request->input('price');
-        $user_id = $request->input('user_id');
-        $dateString = $request->input('start_date');
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'integer' => 'Trường :attribute phải là số nguyên.',
+            'string' => 'Trường :attribute phải là chuỗi.',
+            'image' => 'Trường :attribute phải là hình ảnh.',
+            'mimes' => 'Trường :attribute phải có định dạng: :values.',
+            'max' => 'Trường :attribute không được vượt quá :max kilobytes.',
+            // Các thông báo lỗi khác tùy theo quy tắc xác thực bạn muốn áp dụng
+        ];
 
-        $timestamp = strtotime($dateString);
-        $dateTime = date('Y-m-d H:i:s', $timestamp);
-        $course->instructor = $user_id;
-        $course->course_category_id = $courseCategoryId;
-        $course->title = $newCourseTitle;
-        $course->slug = Str::slug($request->input('title'), '-');
-        $course->description = $description;
-        $course->price = $price;
-        $course->start_date = $dateTime;
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'course_category_id' => 'required|integer',
+            'description' => 'required|string',
+            'price' => 'required',
+            'user_id' => 'required|integer',
+            'start_date' => 'required',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], $customMessages);
 
-        if ($course->course_image != $request->input('image')) {
-            if ($request->hasFile('image')) {
-                $name = $request->file('image')->getClientOriginalName();
-
-                $pathFull = 'uploads/' . date("Y/m/d");
-                $path = $request->file('image')->storeAs(
-                    'public/' . $pathFull,
-                    $name
-                );
-                $course->course_image = '/storage/' . $pathFull . '/' . $name;
-            }
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()]);
         }
 
-        $course->save();
+        try {
+            // Lấy dữ liệu từ request
+            $newCourseTitle = $request->input('title');
+            $courseCategoryId = $request->input('course_category_id');
+            $description = $request->input('description');
+            $price = $request->input('price');
+            $user_id = $request->input('user_id');
+            $dateString = $request->input('start_date');
 
-        return response()->json(['success' => true, 'message' => 'Course update successfully', 'course' => $course]);
+            $timestamp = strtotime($dateString);
+            $dateTime = date('Y-m-d H:i:s', $timestamp);
+
+            $course->instructor = $user_id;
+            $course->course_category_id = $courseCategoryId;
+            $course->title = $newCourseTitle;
+            $course->slug = Str::slug($newCourseTitle, '-');
+            $course->description = $description;
+            $course->price = $price;
+            $course->start_date = $dateTime;
+
+            if ($course->course_image != $request->input('image')) {
+                if ($request->hasFile('image')) {
+                    $name = $request->file('image')->getClientOriginalName();
+                    $pathFull = 'uploads/' . date("Y/m/d");
+                    $path = $request->file('image')->storeAs(
+                        'public/' . $pathFull,
+                        $name
+                    );
+                    $course->course_image = '/storage/' . $pathFull . '/' . $name;
+                }
+            }
+
+            $course->save();
+
+            return response()->json(['success' => true, 'message' => 'Course updated successfully', 'course' => $course]);
+        } catch (Exception $error) {
+            return response()->json(['success' => false, 'message' => 'Có lỗi vui lòng thử lại']);
+        }
     }
 }

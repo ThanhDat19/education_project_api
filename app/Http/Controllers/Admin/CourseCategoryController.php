@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class CourseCategoryController extends Controller
 {
@@ -31,17 +32,29 @@ class CourseCategoryController extends Controller
 
     public function store(Request $request)
     {
-        CourseCategory::create([
-            "name" => $request->input('name'),
-            "title" => $request->input('title'),
-            "slug" => Str::slug($request->input('name'), '-'),
-        ]);
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'title' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         try {
+            CourseCategory::create([
+                'name' => $request->input('name'),
+                'title' => $request->input('title'),
+                'slug' => Str::slug($request->input('name'), '-'),
+            ]);
 
             Session::flash('success', 'Thêm loại khóa học mới thành công');
         } catch (Exception $error) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
 
         return redirect()->back();
@@ -59,17 +72,33 @@ class CourseCategoryController extends Controller
     public function update(Request $request, CourseCategory $category)
     {
 
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'title' => 'required',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $category->fill([
-            "name" => $request->input('name'),
-            "title" => $request->input('title'),
-            "slug" => Str::slug($request->input('name'), '-'),
+            'name' => $request->input('name'),
+            'title' => $request->input('title'),
+            'slug' => Str::slug($request->input('name'), '-'),
         ]);
         $category->save();
+
         try {
             Session::flash('success', 'Cập nhật loại khóa học thành công');
         } catch (\Exception $err) {
-            Session::flash('error', 'Có lỗi vui lòng thử lại');
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
+
         return redirect()->back();
     }
     public function delete(Request $request)
