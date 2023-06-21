@@ -47,6 +47,29 @@
                     $('#lesson').html(response);
                 }
             });
+
+            $.ajax({
+                url: '/admin/questions/filter-by-type',
+                type: 'POST',
+                data: {
+                    course_id: course,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $('#question-list').html(response);
+                }
+            });
+
+            $.ajax({
+                url: '{{ route('get.type') }}',
+                method: 'POST',
+                data: {
+                    course_id: course
+                },
+                success: function(response) {
+                    $('#type').html(response);
+                }
+            });
         });
     });
 </script>
@@ -92,21 +115,21 @@
 
 <script>
     $(document).ready(function() {
-        loadData();
+        // loadData();
 
-        function loadData() {
-            $.ajax({
-                url: '/admin/questions/filter-by-type', // Đường dẫn đến tuyến đường xử lý trong Laravel
-                type: 'POST',
-                data: {
-                    questionTypeId: null,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    $('#question-list').html(response);
-                }
-            });
-        }
+        // function loadData() {
+        //     $.ajax({
+        //         url: '/admin/questions/filter-by-type', // Đường dẫn đến tuyến đường xử lý trong Laravel
+        //         type: 'POST',
+        //         data: {
+        //             questionTypeId: null,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         success: function(response) {
+        //             $('#question-list').html(response);
+        //         }
+        //     });
+        // }
         $('#question-type-select').change(function() {
             var questionTypeId = $(this).val();
 

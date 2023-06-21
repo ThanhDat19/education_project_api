@@ -21,6 +21,15 @@
             </div>
 
             <div class="form-group">
+                <label for="course">Lĩnh vực</label>
+                <select name="type" class="form-control">
+                    @foreach ($types as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="course">Miêu tả</label>
                 <textarea name="description" id="content" class="form-control"></textarea>
             </div>

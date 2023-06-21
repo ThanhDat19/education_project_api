@@ -9,6 +9,7 @@ use App\Models\Lesson;
 use App\Models\Test;
 use App\Models\TestResult;
 use App\Models\TestResultAnswer;
+use App\Models\QuestionType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,7 +107,7 @@ class TestController extends Controller
             return response()->json([
                 'result' => $testResult,
             ], 200);
-        }else {
+        } else {
             return response()->json([
                 'result' => null,
             ], 200);
@@ -140,11 +141,13 @@ class TestController extends Controller
         $totalTests = count($tests);
         $totalPages = ceil($totalTests / $perPage);
 
+        $types = QuestionType::all();
         return response()->json([
             'tests' => $paginatedTests,
             'total_pages' => $totalPages,
             'courses' => $courses,
-            'user' => $user->id
+            'user' => $user->id,
+            'types' => $types
         ], 200);
     }
 
@@ -157,6 +160,7 @@ class TestController extends Controller
                 'course_id' => 'required|integer',
                 'lesson_id' => 'required|integer',
                 'description' => 'required|string',
+                'type' => 'required|integer'
             ]);
 
             // Tạo bài kiểm tra mới
@@ -166,6 +170,7 @@ class TestController extends Controller
                 'lesson_id' => $data['lesson_id'],
                 'description' => $data['description'],
                 'published' => 0,
+                'type'=> $data['type']
             ]);
 
             $test->save();

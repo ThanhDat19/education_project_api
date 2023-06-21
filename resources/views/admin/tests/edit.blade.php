@@ -17,7 +17,6 @@
                 <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề bài kiểm tra"
                     value="{{ $test->title }}">
             </div>
-
             <div class="form-group">
                 <label for="test">Khóa học</label>
                 <select name="course_id" class="form-control" id="course">
@@ -41,12 +40,9 @@
             </div>
 
             <div class="form-group">
-                <label for="question_type">Loại câu hỏi:</label>
-                <select id="question-type-select" class="form-control">
-                    <option value="">Tất cả lĩnh vực</option>
-                    @foreach ($questionTypes as $questionType)
-                        <option value="{{ $questionType->id }}">{{ $questionType->name }}</option>
-                    @endforeach
+                <label for="test">Lĩnh vực</label>
+                <select name="type" class="form-control" id="type">
+
                 </select>
             </div>
 

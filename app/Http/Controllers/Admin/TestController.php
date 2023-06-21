@@ -180,9 +180,18 @@ class TestController extends Controller
         ]);
     }
 
+    public function getTypeOfCourse(Request $request)
+    {
+        $course = Courses::find($request->input('course_id'));
+        $types = QuestionType::where('id', $course->type)->get();
+
+        return view('admin.tests.type-of-course', [
+            'types' => $types
+        ]);
+    }
     public function createTestForCourse(Courses $course)
     {
-        $questionTypes = QuestionType::all();
+        $questionTypes = QuestionType::where('id', $course->type)->get();
         $questions = Question::all();
         return view('admin.tests.add-for-course', [
             'title' => 'Thêm Bài Kiểm Tra Cho Khóa Học ' . $course->title,

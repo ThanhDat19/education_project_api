@@ -15,7 +15,8 @@ class Test extends Model
         'course_id',
         'lesson_id',
         'description',
-        'published'
+        'published',
+        'type'
     ];
 
     public function questions()

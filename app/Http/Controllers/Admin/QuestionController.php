@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Question;
 use App\Models\QuestionType;
 use App\Models\Test;
+use App\Models\Courses;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -137,10 +138,10 @@ class QuestionController extends Controller
 
     public function filterByType(Request $request)
     {
-        $questionTypeId = $request->input('questionTypeId');
+        $course = Courses::find($request->input('course_id'));
         $questions = null;
-        if ($questionTypeId) {
-            $questions = Question::where('question_type_id', $questionTypeId)->get();
+        if ($course) {
+            $questions = Question::where('question_type_id', $course->type)->get();
         } else {
             $questions = Question::all();
         }

@@ -9,9 +9,9 @@
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20"
-                        height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                        role="img" class="iconify iconify--system-uicons" width="20" height="20"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                         <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
                             stroke-linejoin="round">
                             <path
@@ -131,6 +131,23 @@
                         </li>
                     </ul>
                 </li>
+
+                {{-- USER --}}
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="nav-icon fas fa-user-alt"></i>
+                        <span>Tài Khoản</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="/admin/teacher/list">Danh sách giảng viên</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="/admin/student/list">Danh sách học viên</a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 {{-- SETTING --}}
                 <li class="sidebar-item has-sub">

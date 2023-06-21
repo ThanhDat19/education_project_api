@@ -7,6 +7,7 @@ use App\Models\Courses;
 use App\Models\CourseStudent;
 use App\Models\User;
 use App\Models\CourseCategory;
+use App\Models\QuestionType;
 use Illuminate\Http\Request;
 use DateTime;
 use Carbon\Carbon;
@@ -90,13 +91,15 @@ class CoursesController extends Controller
 
             if ($teacherRole) {
                 $courses = Courses::where('instructor', $user->id)->paginate($perPage, ['*'], 'page', $page);
-                $totalPages = $courses->lastPage(); // Use lastPage() method instead of accessing the protected property
+                $totalPages = $courses->lastPage();
 
+                $types = QuestionType::all();
                 return response()->json([
                     "total_pages" => $totalPages,
                     "courses" => $courses,
                     "request" => $request->input(),
                     "categories" => $categories,
+                    "types" => $types,
                 ]);
             }
         }
@@ -118,6 +121,7 @@ class CoursesController extends Controller
         $validator = Validator::make($request->all(), [
             'newCourseTitle' => 'required|string',
             'courseCategoryId' => 'required|integer',
+            'type' => 'required|integer',
             'description' => 'required|string',
             'price' => 'required',
             'user_id' => 'required|integer',
@@ -133,6 +137,7 @@ class CoursesController extends Controller
             // Lấy dữ liệu từ request
             $newCourseTitle = $request->input('newCourseTitle');
             $courseCategoryId = $request->input('courseCategoryId');
+            $type = $request->input('type');
             $description = $request->input('description');
             $price = $request->input('price');
             $user_id = $request->input('user_id');
@@ -150,6 +155,7 @@ class CoursesController extends Controller
             $course->description = $description;
             $course->price = $price;
             $course->published = false;
+            $course->type = $type;
             $course->start_date = $dateTime;
 
             if ($request->hasFile('image')) {

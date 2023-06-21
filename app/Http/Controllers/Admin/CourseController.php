@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CourseCategory;
 use App\Models\Courses;
+use App\Models\QuestionType;
 use Carbon\Carbon;
 use DateTime;
 use Exception;
@@ -19,20 +20,24 @@ class CourseController extends Controller
     public function index()
     {
         $categories = CourseCategory::all();
+        $types = QuestionType::all();
         $courses = Courses::paginate(10);
         return view('admin.course.list', [
             'title' => 'Danh Sách Khóa Học',
             'courses' => $courses,
-            'categories' => $categories
+            'categories' => $categories,
+            'types' => $types
         ]);
     }
 
     public function create()
     {
+        $types = QuestionType::all();
         $courseCategories = CourseCategory::all();
         return view('admin.course.add', [
             'title' => 'Thêm Khóa Học',
-            'categories' => $courseCategories
+            'categories' => $courseCategories,
+            'types' => $types
         ]);
     }
 
@@ -72,14 +77,13 @@ class CourseController extends Controller
                 'course_image' => $request->input('image'),
                 'start_date' => $datetime,
                 'published' => $request->input('published'),
+                'type' => $request->input('type'),
             ]);
             Session::flash('success', 'Thêm khóa học mới thành công');
         } catch (Exception $error) {
             Session::flash('error', 'Có lỗi, vui lòng thử lại');
         }
-
         return redirect()->back();
-
     }
 
 

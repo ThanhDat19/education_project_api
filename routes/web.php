@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\QuestionTypeController;
 use Illuminate\Foundation\Application;
@@ -72,6 +73,7 @@ Route::group(['middleware' => ['role_permission:admin']], function () {
     Route::put('/admin/tests/edit/{test}', [TestController::class, 'update']);
     Route::delete('/admin/tests/destroy', [TestController::class, 'delete']);
     Route::post('/admin/tests/get-lesson-of-course', [TestController::class, 'getLessonOfCourse'])->name('get.lessons');
+    Route::post('/admin/tests/get-type-of-course', [TestController::class, 'getTypeOfCourse'])->name('get.type');
     Route::get('/admin/tests/add', [TestController::class, 'create']);
     Route::post('/admin/tests/add', [TestController::class, 'store']);
 
@@ -112,4 +114,12 @@ Route::group(['middleware' => ['role_permission:admin']], function () {
     Route::get('/admin/pages/information/edit/{information}', [PageController::class, 'informationShow']);
     Route::put('/admin/pages/information/edit/{information}', [PageController::class, 'informationEdit']);
 
+    #Account
+    Route::get('/admin/teacher/list', [AccountController::class, 'teacherList']);
+    Route::get('/admin/teacher/add', [AccountController::class, 'teacherAdd']);
+    Route::post('/admin/teacher/add', [AccountController::class, 'teacherStore']);
+    Route::get('/admin/teacher/show', [AccountController::class, 'teacherShow']);
+    Route::get('/admin/student/list', [AccountController::class, 'studentList']);
+    Route::get('/admin/student/edit', [AccountController::class, 'studentShow']);
+    Route::put('/admin/student/edit', [AccountController::class, 'studentPut']);
 });

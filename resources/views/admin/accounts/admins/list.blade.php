@@ -13,8 +13,8 @@
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                            <a href="{{ url('admin/accounts/admins/add') }}" class="small-box-footer">Thêm Thành Viên Admin<i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('admin/teacher/add') }}" class="small-box-footer">Thêm Giảng Viên<i
+                                    class="fas fa-arrow-circle-right ml-2"></i></a>
                             <h6 class="font-extrabold mb-0"></h6>
                         </div>
                     </div>
@@ -38,34 +38,29 @@
                     </thead>
                     <tbody>
                         @php($i = 1)
-                        @foreach ($users as $key => $user)
+                        @foreach ($teachers as $key => $user)
                             <tr>
                                 <td>{{ $i++ }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>
-                                    @if ($user->role == 0)
+                                    @if ($user->roles->pluck('name')->contains('student'))
                                         <span class="btn btn-primary btn-xs">USER</span>
-                                    @elseif ($user->role == 1)
-                                        <span class="btn btn-success btn-xs">ADMIN</span>
-                                    @elseif ($user->role == 2)
-                                        <span class="btn btn-success btn-xs">ADMIN</span>
+                                    @elseif ($user->roles->pluck('name')->contains('teacher'))
+                                        <span class="btn btn-success btn-xs">TEACHER</span>
+                                    @elseif ($user->roles->pluck('name')->contains('admin'))
                                         <span class="btn btn-danger btn-xs">BOSS</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($user->id != Auth::user()->id && $user->role != 2)
-                                        <a href="/admin/accounts/admins/edit/{{ $user->id }}" class="btn btn-primary">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    @endif
-                                    @if(Auth::user()->role == 2 && $user->id != Auth::user()->id)
-                                    <a href="#"
-                                        onclick="removeRow({{ $user->id }},'/admin/accounts/admins/delete')"
+                                    <a href="/admin/teacher/show/{{ $user->id }}" class="btn btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {{-- <a href="#" onclick="removeRow({{ $user->id }},'/admin/teacher/delete')"
                                         class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
-                                    </a>
-                                    @endif
+                                    </a> --}}
+
                                 </td>
                             </tr>
                         @endforeach
@@ -73,7 +68,7 @@
                     </tbody>
                 </table>
 
-                {{ $users->links() }}
+                {{ $teachers->links() }}
             </div>
         </div>
     </section>
