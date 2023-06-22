@@ -111,3 +111,6 @@ Route::get('/get-comments-lesson/{user}', [CommentController::class, 'getComment
 Route::post('/post-comments-lesson/{user}', [CommentController::class, 'postComments']);
 Route::put('/put-comments-lesson/{user}/{comment}', [CommentController::class, 'putComments']);
 Route::delete('/delete-comments-lesson/{user}/{comment}', [CommentController::class, 'deleteComments']);
+
+//Courses Student Route
+Route::get('/get-courses', [CoursesController::class, 'studentGetCourse']);

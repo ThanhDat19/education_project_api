@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
 use App\Models\CourseStudent;
+use App\Models\Lesson;
 use App\Models\User;
 use App\Models\CourseCategory;
 use App\Models\QuestionType;
@@ -40,6 +41,11 @@ class CoursesController extends Controller
     }
     public function onSelectDetails(Request $request, $id)
     {
+        try {
+
+        } catch (Exception) {
+
+        }
         $user = User::find($request->input('user_id'));
         $categories = CourseCategory::all();
         if ($user) {
@@ -264,5 +270,43 @@ class CoursesController extends Controller
         } catch (Exception $error) {
             return response()->json(['success' => false, 'message' => 'Có lỗi vui lòng thử lại']);
         }
+    }
+
+
+    public function studentGetCourse(Request $request)
+    {
+        $perPage = 6; // Number of courses per page
+        $page = $request->page; // Current page
+
+        $user = User::find($request->user_id);
+        if ($user) {
+            $roles = $user->roles;
+            $studentRole = $roles->firstWhere('name', 'student');
+            $categories = CourseCategory::all();
+
+            if ($studentRole) {
+                $courses = Courses::join('course_students', 'courses.id', '=', 'course_students.course_id')
+                    ->where('course_students.user_id', $user->id)
+                    ->paginate($perPage, ['*'], 'page', $page);
+
+                $totalPages = $courses->lastPage();
+                foreach ($courses as $course) {
+                    $course->lessons = Lesson::where('course_id', $course->course_id)->count();
+                }
+                $types = QuestionType::all();
+                return response()->json([
+                    "total_pages" => $totalPages,
+                    "courses" => $courses,
+                    "request" => $request->input(),
+                    "categories" => $categories,
+                    "types" => $types,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unauthorized',
+        ], 401);
     }
 }

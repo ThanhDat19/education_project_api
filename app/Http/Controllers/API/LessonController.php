@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
+use App\Models\CourseStudent;
 use App\Models\Lesson;
 use App\Models\LessonStudent;
 use App\Models\User;
@@ -57,13 +58,26 @@ class LessonController extends Controller
         $watched_time = $request->input('current_time');
         $lessonOfStudent = LessonStudent::where([
             'lesson_id' => $lesson->id,
+            'course_id' => $course->id,
+            'user_id' => $user->id
+        ])->first();
+        $courseStudent = CourseStudent::where([
+            'user_id' => $user->id,
             'course_id' => $course->id
         ])->first();
         if ($lessonOfStudent) {
 
             if ($lessonOfStudent->watched_video < $watched_time)
                 $lessonOfStudent->watched_video = $watched_time;
+
+            $lessonCheck = ($lessonOfStudent->watched_video / $lesson->video_time) * 100;
+            if ($lessonCheck >= 80) {
+                $lessonOfStudent->lesson_status = 1;
+
+                $courseStudent->status_course += 1;
+            }
             $lessonOfStudent->save();
+            $courseStudent->save();
 
             return response()->json([
                 "message" => "success",

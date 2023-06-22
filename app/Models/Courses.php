@@ -23,16 +23,19 @@ class Courses extends Model
         'type'
     ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(CourseCategory::class, 'course_category_id', 'id');
     }
 
-    public function lessons(){
-        return $this->hasMany(Lesson::class, 'course_id', 'id');
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class, 'id', 'course_id');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'id');
     }
+
 }
