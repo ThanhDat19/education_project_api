@@ -71,11 +71,12 @@ class LessonController extends Controller
                 $lessonOfStudent->watched_video = $watched_time;
 
             $lessonCheck = ($lessonOfStudent->watched_video / $lesson->video_time) * 100;
-            if ($lessonCheck >= 80) {
+            if ($lessonCheck >= 80 && $lessonOfStudent->lesson_status != 1) {
                 $lessonOfStudent->lesson_status = 1;
 
                 $courseStudent->status_course += 1;
             }
+
             $lessonOfStudent->save();
             $courseStudent->save();
 

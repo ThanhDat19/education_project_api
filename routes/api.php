@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ChartController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CourseStudentController;
 use App\Http\Controllers\API\FooterController;
+use App\Http\Controllers\API\HomePageController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\API\CoursesController;
@@ -101,6 +103,9 @@ Route::post('/post-questions-teacher', [QuestionController::class, 'postQuestion
 Route::get('/get-question-detail/{question}', [QuestionController::class, 'getQuestionDetail']);
 Route::post('/update-questions-teacher/{question}', [QuestionController::class, 'updateQuestions']);
 Route::delete('/delete-questions-teacher/{question}', [QuestionController::class, 'deleteQuestion']);
+
+//Teacher manages students Route
+Route::get('/get-users-teacher', [UserController::class, 'getListStudent']);
 
 //Lesson Student Route
 Route::post('/get-lessons-student/{user}', [LessonController::class, 'getLessonOfStudent']);
