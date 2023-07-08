@@ -63,12 +63,12 @@ class AccountController extends Controller
     public function teacherShow(User $user)
     {
         $course_id = CourseTeacher::where('teacher_id', $user->id)->value('course_id');
-        $course = Courses::where('id', $course_id)->get();
+        $courses = Courses::where('instructor', $user->id)->paginate(10);
 
         return view('admin.accounts.admins.show', [
             'title' => 'Thông tin chi tiết',
             'user' => $user,
-            'course' => $course
+            'courses' => $courses
         ]);
     }
     public function studentList()
@@ -84,16 +84,22 @@ class AccountController extends Controller
 
     public function studentShow(User $user)
     {
-        $course_id = CourseStudent::where('user_id', 2)->value('course_id');
-        $course = Courses::where('id', $course_id)->get();
+        if ($user) {
+            $roles = $user->roles;
+            $studentRole = $roles->firstWhere('name', 'student');
 
+            if ($studentRole) {
+                $courses = Courses::join('course_students', 'courses.id', '=', 'course_students.course_id')
+                    ->where('course_students.user_id', $user->id)
+                    ->paginate(10);
 
-        return view('admin.accounts.users.show', [
-            'title' => 'Thông tin chi tiết',
-            'user' => $user,
-            'course' => $course
+                return view('admin.accounts.users.show', [
+                    'title' => 'Thông tin chi tiết',
+                    'user' => $user,
+                    'courses' => $courses
 
-        ]);
-
+                ]);
+            }
+        }
     }
 }

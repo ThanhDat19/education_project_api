@@ -93,6 +93,7 @@
         </div>
         <!-- ./col -->
         <div class="card">
+            <h4 class="text-center my-2">Biểu Đồ Thể Hiện Doanh Thu Hàng Tháng Của Hệ Thống</h4>
             <div class="card-body" style="width: 100%; margin: auto">
                 <canvas id="myChart"></canvas>
             </div>
