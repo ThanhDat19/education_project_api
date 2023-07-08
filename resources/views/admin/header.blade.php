@@ -20,5 +20,7 @@
 
 <link rel="stylesheet" href="{{ asset('template/assets/css/shared/iconly.css') }}" />
 <link rel="stylesheet" href="{{ asset('template/admin/datepicker/css/datepicker.css') }}" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @yield('head')

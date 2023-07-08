@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use ConsoleTVs\Charts\Facades\Charts;
 
 class PaymentController extends Controller
 {
@@ -65,4 +66,5 @@ class PaymentController extends Controller
             ]);
         }
     }
+
 }

@@ -16,4 +16,9 @@ class CourseStudent extends Model
         'rating',
         'status_course'
     ];
+
+    public function courses()
+    {
+        return $this->belongsTo(Courses::class, 'course_id', 'id');
+    }
 }

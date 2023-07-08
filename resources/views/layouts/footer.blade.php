@@ -52,17 +52,48 @@
         $.ajax({
             type: "GET",
             url: "/post-list",
-            success: function (response) {
+            success: function(response) {
                 startAutoComplete(response)
             }
         });
 
-        function startAutoComplete( availableTags ){
+        function startAutoComplete(availableTags) {
             $("#search").autocomplete({
-            source: availableTags
-        });
+                source: availableTags
+            });
         }
 
     });
 </script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {
+        packages: ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'Amount');
+
+        // Thêm dữ liệu vào DataTable
+        for (var i = 0; i < <?= count($dates) ?>; i++) {
+            data.addRow([<?= json_encode($dates[$i]) ?>, <?= $amounts[$i] ?>]);
+        }
+
+        var options = {
+            title: 'Revenue Chart',
+            curveType: 'function',
+            legend: {
+                position: 'bottom'
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
+
 @yield('footer')

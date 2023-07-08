@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseResource;
 use App\Models\Courses;
 use App\Models\CourseStudent;
 use App\Models\Lesson;
@@ -29,7 +30,7 @@ class CoursesController extends Controller
     {
         $perPage = 6; // Number of courses per page
         $page = $request->page; // Current page
-        $courses = Courses::paginate($perPage, ['*'], 'page', $page);
+        $courses = Courses::where('published', 1)->paginate($perPage, ['*'], 'page', $page);
         $totalPages = $courses->lastPage(); // Use lastPage() method instead of accessing the protected property
         $categories = CourseCategory::all();
         return response()->json([
@@ -49,9 +50,10 @@ class CoursesController extends Controller
         $user = User::find($request->input('user_id'));
         $categories = CourseCategory::all();
         if ($user) {
-            $course = Courses::where([
+            $course = new CourseResource(Courses::where([
                 'id' => $id
-            ])->first();
+            ])->first());
+
 
             $courseStudent = CourseStudent::where([
                 'user_id' => $user->id,
@@ -72,9 +74,9 @@ class CoursesController extends Controller
             ], 200);
 
         } else {
-            $course = Courses::where([
+            $course = new CourseResource(Courses::where([
                 'id' => $id
-            ])->first();
+            ])->first());
 
             return response()->json([
                 "data" => $course,

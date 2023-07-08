@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Role;
+
 
 class AuthController extends Controller
 {
@@ -43,6 +45,7 @@ class AuthController extends Controller
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
                 'roles' => $role,
+                'avarta'=>$user->avarta
             ],
             'authorisation' => [
                 'token' => $token,
@@ -54,29 +57,26 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
         ]);
 
+        $studentRole = Role::firstOrCreate(['name' => 'student']);
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
         ]);
 
-        $token = Auth::guard('api')->login($user);
+        $user->roles()->attach($studentRole);
+
         return response()->json([
-            'status' => 'success',
-            'message' => 'User created successfully',
+            'message' => 'Đăng ký thành công',
             'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+        ], 201);
     }
 
     public function logout()
@@ -100,7 +100,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function getUser(){
+    public function getUser()
+    {
 
     }
 }

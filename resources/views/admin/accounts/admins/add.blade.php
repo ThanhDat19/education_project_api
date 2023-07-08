@@ -3,7 +3,7 @@
 @endsection
 @section('contents')
     <div class="card-body">
-        <form action="{{url('admin/accounts/admins/add')}}" method="post" enctype="multipart/form-data">
+        <form action="{{url('admin/teacher/add')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="user">Họ và tên</label>
@@ -21,9 +21,10 @@
                 <label for="user">Xác Nhận</label>
                 <input type="password" name="password_confirm" class="form-control"/>
             </div>
+
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Tạo Tài Khoản</button>
-                <a href="{{ url('admin/accounts/admins/list') }}" class="btn btn-danger ">Trở Về</a>
+                <a href="{{ url('admin/teacher/list') }}" class="btn btn-danger ">Trở Về</a>
             </div>
         </form>
     </div>

@@ -9,6 +9,9 @@ use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class UserController extends Controller
 {
@@ -101,4 +104,47 @@ class UserController extends Controller
         ], 401);
     }
 
+    public function updateInformation(Request $request, User $user)
+    {
+
+
+        try {
+            // Lấy dữ liệu từ request
+            $name = $request->input('name');
+            $email = $request->input('email');
+
+            $user->name = $name;
+            $user->email = $email;
+
+            $role = $user->roles()->pluck('name')->first();
+            if ($request->hasFile('avarta')) {
+                $name = $request->file('avarta')->getClientOriginalName();
+                $pathFull = 'uploads/' . date("Y/m/d");
+                $path = $request->file('avarta')->storeAs(
+                    'public/' . $pathFull,
+                    $name
+                );
+                $user->avarta = '/storage/' . $pathFull . '/' . $name;
+            }
+
+            $user->save();
+            return response()->json([
+                'success' => true,
+                'message' => 'Information updated successfully',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'email_verified_at' => $user->email_verified_at,
+                    'created_at' => $user->created_at,
+                    'updated_at' => $user->updated_at,
+                    'roles' => $role,
+                    'avarta' => $user->avarta
+                ],
+            ]);
+
+        } catch (Exception $error) {
+            return response()->json(['success' => false, 'message' => 'Có lỗi vui lòng thử lại']);
+        }
+    }
 }

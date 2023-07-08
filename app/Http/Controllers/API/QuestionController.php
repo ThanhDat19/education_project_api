@@ -56,7 +56,6 @@ class QuestionController extends Controller
             'question_type_id' => 'required|integer',
             'question' => 'required|string',
             'score' => 'required|integer',
-            // 'multi_answer' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'options' => 'required',
             'options.*.content' => 'required|string',
@@ -73,7 +72,7 @@ class QuestionController extends Controller
             $question->question_type_id = $request->input('question_type_id');
             $question->question = $request->input('question');
             $question->score = $request->input('score');
-            $question->multi_answer = $request->input('multi_answer') ? 1 : 0;
+            $question->multi_answer = $request->input('multi_answer') == 'true' ? 1 : 0;
 
             if ($request->hasFile('image')) {
                 $name = $request->file('image')->getClientOriginalName();
@@ -89,7 +88,6 @@ class QuestionController extends Controller
 
             // Create question options
             $options = json_decode($request->input('options'), true);
-
             foreach ($options as $option) {
                 $questionOption = new QuestionOption();
                 $questionOption->question_id = $question->id;
@@ -138,7 +136,6 @@ class QuestionController extends Controller
             'question_type_id' => 'required|integer',
             'question' => 'required|string',
             'score' => 'required|integer',
-            // 'multi_answer' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'options' => 'required',
             'options.*.content' => 'required|string',
@@ -155,7 +152,7 @@ class QuestionController extends Controller
             $question->question_type_id = $request->input('question_type_id');
             $question->question = $request->input('question');
             $question->score = $request->input('score');
-            $question->multi_answer = $request->input('multi_answer') ? 1 : 0;
+            $question->multi_answer = $request->input('multi_answer') == 'true' ? 1 : 0;
 
             if ($request->hasFile('image')) {
                 $name = $request->file('image')->getClientOriginalName();
@@ -168,6 +165,7 @@ class QuestionController extends Controller
             }
 
             $question->save();
+            QuestionOption::where('question_id', $question->id)->delete();
 
             if ($request->input('options_length') > 1) {
                 $options = json_decode($request->input('options'), true);

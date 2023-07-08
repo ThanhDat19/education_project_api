@@ -13,7 +13,7 @@
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                            <a href="{{ url('admin/teacher/add') }}" class="small-box-footer">Thêm Giảng Viên<i
+                            <a href="{{url('admin/teacher/add')}}" class="small-box-footer">Thêm Giảng Viên<i
                                     class="fas fa-arrow-circle-right ml-2"></i></a>
                             <h6 class="font-extrabold mb-0"></h6>
                         </div>

@@ -9,6 +9,11 @@ class QuestionType extends Model
 {
     use HasFactory;
     protected $fillable = [
-       'name'
+        'name'
     ];
+
+    public function courses()
+    {
+        return $this->hasMany(Courses::class, 'type');
+    }
 }

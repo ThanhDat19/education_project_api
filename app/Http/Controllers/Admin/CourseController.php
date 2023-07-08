@@ -125,7 +125,6 @@ class CourseController extends Controller
             $datetime = DateTime::createFromFormat('U', $timestamp);
 
             $course->fill([
-                'instructor' => Auth::user()->id,
                 'course_category_id' => $request->input('course_category_id'),
                 'title' => $request->input('title'),
                 'slug' => Str::slug($request->input('title'), '-'),

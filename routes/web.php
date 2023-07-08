@@ -118,8 +118,13 @@ Route::group(['middleware' => ['role_permission:admin']], function () {
     Route::get('/admin/teacher/list', [AccountController::class, 'teacherList']);
     Route::get('/admin/teacher/add', [AccountController::class, 'teacherAdd']);
     Route::post('/admin/teacher/add', [AccountController::class, 'teacherStore']);
-    Route::get('/admin/teacher/show', [AccountController::class, 'teacherShow']);
+    Route::get('/admin/teacher/show/{user}', [AccountController::class, 'teacherShow']);
     Route::get('/admin/student/list', [AccountController::class, 'studentList']);
-    Route::get('/admin/student/edit', [AccountController::class, 'studentShow']);
+    Route::get('/admin/student/show/{user}', [AccountController::class, 'studentShow']);
     Route::put('/admin/student/edit', [AccountController::class, 'studentPut']);
+
+    //logic xử lý upload file.
+    Route::post('upload', function (Request $request) {
+
+    })->name('upload.handle');
 });

@@ -36,7 +36,7 @@
 
             <div class="form-group">
                 <label for="question_type">Loại câu hỏi:</label>
-                <select id="question-type-select" class="form-control">
+                <select id="question-type-select" name="type" class="form-control">
                     <option value="">--Chọn Lĩnh Vực--</option>
                     @foreach ($questionTypes as $questionType)
                         <option value="{{ $questionType->id }}">{{ $questionType->name }}</option>

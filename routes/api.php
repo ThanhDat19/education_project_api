@@ -6,6 +6,7 @@ use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CourseStudentController;
 use App\Http\Controllers\API\FooterController;
 use App\Http\Controllers\API\HomePageController;
+use App\Http\Controllers\API\InformationController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\API\CoursesController;
@@ -62,6 +63,7 @@ Route::post('/course-details/{id}', [CoursesController::class, 'onSelectDetails'
 Route::get('/footer-data', [FooterController::class, 'onSelectAll']);
 //Information Route
 Route::get('/information', [InformationController::class, 'onSelectAll']);
+Route::post('/update-information/{user}',[UserController::class,'updateInformation']);
 //Services Route
 Route::get('/services', [ServiceController::class, 'ServiceView']);
 //Project Route

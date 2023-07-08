@@ -17,7 +17,7 @@ class TestController extends Controller
 {
     public function index()
     {
-        $tests = Test::paginate(10);
+        $tests = Test::paginate(5);
         return view('admin.tests.list', [
             'title' => 'Danh Sách Bài Kiểm Tra',
             'tests' => $tests
@@ -100,6 +100,7 @@ class TestController extends Controller
 
     public function update(Request $request, Test $test)
     {
+        // dd($request->input());
         $customMessages = [
             'required' => 'Trường :attribute là bắt buộc.',
             'integer' => 'Trường :attribute phải là số nguyên.',
@@ -127,6 +128,7 @@ class TestController extends Controller
                 'lesson_id',
                 'description',
                 'published',
+                'type'
             ]);
 
             // Cập nhật thông tin bài kiểm tra
@@ -202,6 +204,8 @@ class TestController extends Controller
     }
     public function storeTestForCourse(Request $request, Courses $course)
     {
+        // dd($request->input());
+
         $customMessages = [
             'required' => 'Trường :attribute là bắt buộc.',
             'integer' => 'Trường :attribute phải là số nguyên.',
@@ -220,24 +224,23 @@ class TestController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+        // Lấy dữ liệu từ request
+        $data = $request->only([
+            'title',
+            'course_id',
+            'lesson_id',
+            'description',
+            'published',
+            'type'
+        ]);
 
+        // Tạo bài kiểm tra mới
+        $test = Test::create($data);
+
+        // Liên kết các câu hỏi đã chọn với bài kiểm tra
+        $questions = Question::whereIn('id', $request->questions)->get();
+        $test->questions()->attach($questions);
         try {
-            // Lấy dữ liệu từ request
-            $data = $request->only([
-                'title',
-                'course_id',
-                'lesson_id',
-                'description',
-                'published',
-            ]);
-
-            // Tạo bài kiểm tra mới
-            $test = Test::create($data);
-
-            // Liên kết các câu hỏi đã chọn với bài kiểm tra
-            $questions = Question::whereIn('id', $data['questions'])->get();
-            $test->questions()->attach($questions);
-
             Session::flash('success', 'Thêm bài kiểm tra mới thành công');
         } catch (Exception $error) {
             Session::flash('error', 'Có lỗi vui lòng thử lại');

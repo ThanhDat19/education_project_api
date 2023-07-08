@@ -13,6 +13,7 @@
                             <th>Tên Bài Học</th>
                             <th style="width: 400px">Miêu Tả</th>
                             <th>Trạng thái</th>
+                            <th>Vị trí</th>
                             <th>Cập nhật</th>
                             <th style="width: 150px">&nbsp;</th>
                         </tr>
@@ -30,6 +31,9 @@
                                     @else
                                         <span class="btn btn-success btn-xs">YES</span>
                                     @endif
+                                </td>
+                                <td>
+                                   {{ $lesson->position }}
                                 </td>
                                 <td>
                                     @if($lesson->updated_at == NULL)

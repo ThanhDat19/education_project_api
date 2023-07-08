@@ -18,7 +18,7 @@ class LessonController extends Controller
         $lessons = Lesson::where('course_id', $course->id)
             ->with([
                 'students' => function ($query) {
-                    $query->select('users.*', 'lesson_students.watched_video');
+                    $query->select('users.*', 'lesson_students.watched_video', 'lesson_students.lesson_status');
                 }
             ])
             ->get();
@@ -28,7 +28,6 @@ class LessonController extends Controller
 
     public function getLessonOfStudent(Request $request, User $user)
     {
-
         $lesson = Lesson::find($request->input('lesson_id'));
         $course = Lesson::find($request->input('course_id'));
         $lessonOfStudent = $user->lessons()
@@ -55,6 +54,7 @@ class LessonController extends Controller
     {
         $lesson = Lesson::find($request->input('lesson_id'));
         $course = Lesson::find($request->input('course_id'));
+
         $watched_time = $request->input('current_time');
         $lessonOfStudent = LessonStudent::where([
             'lesson_id' => $lesson->id,

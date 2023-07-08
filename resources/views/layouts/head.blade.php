@@ -59,5 +59,7 @@
             display: none;
         }
     </style>
+
+
     @yield('head')
 </head>

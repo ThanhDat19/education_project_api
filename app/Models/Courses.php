@@ -30,9 +30,13 @@ class Courses extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class, 'id', 'course_id');
+        return $this->hasMany(Lesson::class, 'course_id', 'id');
     }
 
+    public function type()
+    {
+        return $this->belongsTo(QuestionType::class, 'id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'id');

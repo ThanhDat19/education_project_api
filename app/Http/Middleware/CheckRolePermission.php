@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckRolePermission
@@ -20,10 +21,8 @@ class CheckRolePermission
 
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+            Session::flash('error', 'Hãy đăng nhập để tiếp tục');
+            return redirect()->back();
         }
 
         // Kiểm tra vai trò của người dùng
@@ -32,10 +31,8 @@ class CheckRolePermission
 
         if (!$hasRole) {
             Auth::guard('web')->logout();
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+            Session::flash('error', 'Người dùng không đủ quyền');
+            return redirect()->back();
         }
 
         return $next($request);
