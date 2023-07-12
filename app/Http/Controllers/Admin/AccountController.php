@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Lesson;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Courses;
@@ -93,6 +94,9 @@ class AccountController extends Controller
                     ->where('course_students.user_id', $user->id)
                     ->paginate(10);
 
+                foreach ($courses as $course) {
+                    $course->lessons = Lesson::where('course_id', $course->course_id)->count();
+                }
                 return view('admin.accounts.users.show', [
                     'title' => 'Thông tin chi tiết',
                     'user' => $user,
@@ -101,5 +105,54 @@ class AccountController extends Controller
                 ]);
             }
         }
+    }
+
+    public function userShow(User $user)
+    {
+
+        $user = Courses::where('id', 1)->get();
+
+
+        return view('admin.profile.edit', [
+            'title' => 'Thông tin chi tiết',
+            'user' => $user,
+
+
+        ]);
+
+    }
+
+    public function userUpdate(User $user, Request $request)
+    {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        try {
+            $user->fill([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+
+            ]);
+            if ($request->input('image')) {
+                $user->avarta = $request->input('image');
+            }
+            $user->save();
+            Session::flash('success', 'Cập nhật thông tin thành công');
+        } catch (\Exception $err) {
+            Session::flash('error', 'Có lỗi, vui lòng thử lại');
+        }
+
+
+        return redirect()->back();
     }
 }

@@ -52,7 +52,7 @@ class HomeController extends Controller
 
         $datasets = [
             [
-                'label' => 'Biểu Đồ Doanh Thu',
+                'label' => 'Tổng số doanh (Đơn vị tính $)',
                 'data' => $data,
                 'backgroundColor' => $colors
             ]

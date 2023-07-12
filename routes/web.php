@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\QuestionTypeController;
 use Illuminate\Foundation\Application;
@@ -122,6 +124,19 @@ Route::group(['middleware' => ['role_permission:admin']], function () {
     Route::get('/admin/student/list', [AccountController::class, 'studentList']);
     Route::get('/admin/student/show/{user}', [AccountController::class, 'studentShow']);
     Route::put('/admin/student/edit', [AccountController::class, 'studentPut']);
+    Route::get('/profile/edit/{user}', [AccountController::class, 'userShow']);
+    Route::post('/profile/edit/{user}', [AccountController::class, 'userUpdate']);
+
+    #Comments
+    Route::get('/admin/comments/list', [CommentController::class, 'list']);
+    Route::delete('/admin/comment/destroy', [CommentController::class, 'delete']);
+
+    #Discounts
+    Route::get('/admin/discounts/add', [DiscountController::class, 'add']);
+    Route::post('/admin/discounts/add', [DiscountController::class, 'store']);
+    Route::get('/admin/discounts/list', [DiscountController::class, 'list']);
+    Route::delete('/admin/discounts/destroy', [DiscountController::class, 'delete']);
+    Route::post('/admin/discounts/get-course', [DiscountController::class, 'getCourse'])->name('get.course');
 
     //logic xử lý upload file.
     Route::post('upload', function (Request $request) {

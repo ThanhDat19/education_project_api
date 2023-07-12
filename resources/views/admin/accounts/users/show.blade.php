@@ -8,22 +8,34 @@
 @endsection
 @section('contents')
     <div class="card-body">
-        <div class="mb-3">
-            @if ($user->avarta)
-                <img src="{{ $user->avarta }}" width="20%">
-            @else
-                <img src="/storage/images/avatar/default-avatar.png" width="20%">
-            @endif
-        </div>
-        <div class="mb-3">
-            <label for="user">Email</label>
-            <p class="form-control">{{ $user->email }}</p>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3 text-center">
+                        @if ($user->avarta)
+                            <img src="{{ $user->avarta }}"
+                                style="min-width: 200px; max-width: 200px ; min-height: 200px ; max-height: 200px ; border-radius: 100%; object-fit: cover">
+                        @else
+                            <img src="/storage/images/avatar/default-avatar.png"
+                                style="min-width: 200px; max-width: 200px ; min-height: 200px ; max-height: 200px ; border-radius: 100%; object-fit: cover">
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="user">Email</label>
+                        <p class="form-control">{{ $user->email }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="user">Họ và tên</label>
+                        <p class="form-control">{{ $user->name }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="user">Họ và tên</label>
-            <p class="form-control">{{ $user->name }}</p>
-        </div>
+
 
         <div class="mb-3">
             <label for="user">Danh sách khóa học đăng ký</label>
@@ -43,7 +55,7 @@
                                     <th>Tên Khóa Học</th>
                                     <th>Loại khóa học</th>
                                     <th>Giá khóa học</th>
-                                    <th>Trạng thái</th>
+                                    <th class="text-center">Trạng thái hoàn thành khóa học</th>
                                     <th>Ngày cập nhật</th>
                                     <th style="width: 150px">&nbsp;</th>
                                 </tr>
@@ -65,12 +77,10 @@
                                         <td>{{ $course->title }}</td>
                                         <td>{{ $course->category->name }}</td>
                                         <td>{{ $course->price }}</td>
-                                        <td>
-                                            @if ($course->published == 0)
-                                                <span class="btn btn-danger btn-xs">NO</span>
-                                            @else
-                                                <span class="btn btn-success btn-xs">YES</span>
-                                            @endif
+                                        <td class="text-center">
+                                            {{ ($course->status_course / $course->lessons) * 100 !== null && $course->lessons
+                                                ? ($course->status_course / $course->lessons) * 100 . '%'
+                                                : 'Chưa hoàn thành' }}
                                         </td>
                                         <td>
                                             @if ($course->updated_at == null)

@@ -132,6 +132,35 @@
                     </ul>
                 </li>
 
+                {{-- COMMENTS --}}
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="nav-icon fas fa-comment-alt"></i>
+                        <span>Bình luận</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="/admin/comments/list">Danh sách bình luận</a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- DISCOUNT --}}
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="nav-icon fas fa-tags"></i>
+                        <span>Giảm giá</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="/admin/discounts/add">Thêm giảm giá</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="/admin/discounts/list">Danh sách giảm giá</a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- USER --}}
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">

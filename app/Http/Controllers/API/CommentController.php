@@ -15,7 +15,8 @@ class CommentController extends Controller
     {
         $lesson = Lesson::find($request->lesson);
         $comments = Comment::where([
-            'lesson_id' => $lesson->id
+            'lesson_id' => $lesson->id,
+            'impolite' => 0
         ])->get();
 
         if ($comments) {
@@ -39,12 +40,14 @@ class CommentController extends Controller
                 'author' => 'required',
                 'content' => 'required|string',
                 'lesson' => 'required',
+                'impolite' => 'required',
             ]);
 
             $comment = new Comment();
             $comment->lesson_id = $data['lesson'];
             $comment->user_id = $data['author'];
             $comment->comment_body = $data['content'];
+            $comment->impolite = $data['impolite'];
             $comment->save();
             return response()->json([
                 'request' => $request->input(),

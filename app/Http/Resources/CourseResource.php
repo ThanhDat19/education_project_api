@@ -6,6 +6,7 @@ use App\Models\CourseStudent;
 use App\Models\Lesson;
 use App\Models\QuestionType;
 use App\Models\User;
+use App\Models\Discount;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -34,9 +35,12 @@ class CourseResource extends JsonResource
             "category" => $this->category,
             "lessons" => $this->lessons,
             "type" => QuestionType::where('id', $this->type)->first(),
-            "lessonCount" => Lesson::where('course_id',  $this->id)->count(),
+            "lessonCount" => Lesson::where('course_id', $this->id)->count(),
             "studentCount" => CourseStudent::where('course_id', $this->id)->count(),
-            "lessonTimeCount" => Lesson::select('video_time')->where('course_id',  $this->id)->sum('video_time')
+            "lessonTimeCount" => Lesson::select('video_time')->where('course_id', $this->id)->sum('video_time'),
+            "discount" => Discount::where('course_id', $this->id)
+                ->orderBy('created_at', 'desc')
+                ->first(),
         ];
     }
 }

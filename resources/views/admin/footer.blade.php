@@ -34,6 +34,21 @@
 <!-- File JavaScript để xử lý Ajax -->
 <script>
     $(document).ready(function() {
+        $('#categories').change(function() {
+            var category = $(this).val();
+
+            $.ajax({
+                url: '{{ route('get.course') }}',
+                method: 'POST',
+                data: {
+                    category: category
+                },
+                success: function(response) {
+                    $('#course').html(response);
+                }
+            });
+        })
+
         $('#course').change(function() {
             var course = $(this).val();
 
@@ -115,21 +130,6 @@
 
 <script>
     $(document).ready(function() {
-        // loadData();
-
-        // function loadData() {
-        //     $.ajax({
-        //         url: '/admin/questions/filter-by-type', // Đường dẫn đến tuyến đường xử lý trong Laravel
-        //         type: 'POST',
-        //         data: {
-        //             questionTypeId: null,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             $('#question-list').html(response);
-        //         }
-        //     });
-        // }
         $('#question-type-select').change(function() {
             var questionTypeId = $(this).val();
 
@@ -149,6 +149,7 @@
 
     });
 </script>
+
 {{-- <script src="{{ asset('template/assets/extensions/apexcharts/apexcharts.min.js') }}"></script> --}}
 {{-- <script src="{{ asset('template/assets/js/pprices/dashboard.js') }}"></script> --}}
 @yield('footer')

@@ -15,6 +15,7 @@ class Comment extends Model
         'lesson_id',
         'user_id',
         'comment_body',
+        'impolite'
     ];
 
 

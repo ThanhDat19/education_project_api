@@ -93,6 +93,12 @@ Route::get('/get-course-teacher', [CoursesController::class, 'teacherGetCourse']
 Route::post('/post-course-teacher', [CoursesController::class, 'teacherPostCourse']);
 Route::delete('/delete-course-teacher/{course}', [CoursesController::class, 'teacherDeleteCourse']);
 Route::post('/update-course-teacher/{course}', [CoursesController::class, 'teacherUpdateCourse']);
+
+//Lesson Teacher Route
+Route::post('/post-lesson-teacher/{course}', [LessonController::class, 'teacherPostLesson']);
+Route::delete('/delete-lesson-teacher/{lesson}', [LessonController::class, 'teacherDeleteLesson']);
+Route::post('/update-lesson-teacher/{lesson}', [LessonController::class, 'teacherUpdateLesson']);
+
 //Test Teacher Route
 Route::get('/get-tests-teacher/{user}', [TestController::class, 'teacherGetTests']);
 Route::post('/post-tests-teacher', [TestController::class, 'teacherPostTests']);

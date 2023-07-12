@@ -8,21 +8,31 @@
 @endsection
 @section('contents')
     <div class="card-body">
-        <div class="mb-3">
-            @if ($user->avarta)
-                <img src="{{ $user->avarta }}" width="20%">
-            @else
-                <img src="/storage/images/avatar/default-avatar.png" width="20%">
-            @endif
-        </div>
-        <div class="mb-3">
-            <label for="user">Email</label>
-            <p class="form-control">{{ $user->email }}</p>
-        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3 text-center">
+                        @if ($user->avarta)
+                            <img src="{{ $user->avarta }}"
+                                style="min-width: 200px; max-width: 200px ; min-height: 200px ; max-height: 200px ; border-radius: 100%; object-fit: cover">
+                        @else
+                            <img src="/storage/images/avatar/default-avatar.png"
+                                style="min-width: 200px; max-width: 200px ; min-height: 200px ; max-height: 200px ; border-radius: 100%; object-fit: cover">
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="user">Email</label>
+                        <p class="form-control">{{ $user->email }}</p>
+                    </div>
 
-        <div class="mb-3">
-            <label for="user">Họ và tên</label>
-            <p class="form-control">{{ $user->name }}</p>
+                    <div class="mb-3">
+                        <label for="user">Họ và tên</label>
+                        <p class="form-control">{{ $user->name }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="mb-3">
