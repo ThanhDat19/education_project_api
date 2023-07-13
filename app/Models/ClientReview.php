@@ -9,11 +9,21 @@ class ClientReview extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-
     protected $fillable = [
-        'client_img',
-        'client_title',
-        'client_description'
+        'user_id',
+        'courses_id',
+        'impolite',
+        'star_count',
+        'content',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Courses::class, 'courses_id', 'id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ClientReview;
 use App\Models\CourseStudent;
 use App\Models\Lesson;
 use App\Models\QuestionType;
@@ -41,6 +42,11 @@ class CourseResource extends JsonResource
             "discount" => Discount::where('course_id', $this->id)
                 ->orderBy('created_at', 'desc')
                 ->first(),
+            "averageRating" => CourseStudent::where('course_id', $this->id)->avg('rating'),
+            "reviews" => ClientReview::join('users', 'client_reviews.user_id', '=', 'users.id')
+                ->where(['client_reviews.courses_id' => $this->id, 'client_reviews.impolite' => 0])
+                ->selectRaw('client_reviews.*, users.id AS user_id, users.name AS user_name')
+                ->get(),
         ];
     }
 }

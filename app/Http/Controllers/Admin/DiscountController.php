@@ -52,14 +52,39 @@ class DiscountController extends Controller
             $startDate = DateTime::createFromFormat('U', $timestamp);
             $timestamp = Carbon::createFromFormat('d-m-Y', $request->input('end_date'))->timestamp;
             $endDate = DateTime::createFromFormat('U', $timestamp);
-            $discount = Discount::create([
-                'name' => $request->input('name'),
-                'discount_types' => $request->input('discount_types'),
-                'reduction_rate' => $request->input('reduction_rate'),
-                'course_id' => $request->input('course_id'),
-                'start_date' => $startDate,
-                'end_date' => $endDate,
-            ]);
+            $discount = null;
+            $course = Courses::find($request->input('course_id'));
+            if (($request->input('discount_types') == 2)) {
+                if (($course->price - $request->input('reduction_rate')) > 0) {
+                    $discount = Discount::create([
+                        'name' => $request->input('name'),
+                        'discount_types' => $request->input('discount_types'),
+                        'reduction_rate' => $request->input('reduction_rate'),
+                        'course_id' => $request->input('course_id'),
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                    ]);
+                } else {
+                    Session::flash('error', 'Thêm giảm giá thất bại! Mức giảm lớn hơn giá cơ bản');
+                    return redirect()->back();
+                }
+            } else {
+                if ($request->input('reduction_rate') >= 10 && $request->input('reduction_rate') <= 100) {
+                    $discount = Discount::create([
+                        'name' => $request->input('name'),
+                        'discount_types' => $request->input('discount_types'),
+                        'reduction_rate' => $request->input('reduction_rate'),
+                        'course_id' => $request->input('course_id'),
+                        'start_date' => $startDate,
+                        'end_date' => $endDate,
+                    ]);
+                } else {
+                    Session::flash('error', 'Thêm giảm giá thất bại! Mức giảm không hợp lệ (10% - 100%)');
+                    return redirect()->back();
+                }
+
+            }
+
 
             if ($discount) {
                 Session::flash('success', 'Thêm giảm giá thành công');

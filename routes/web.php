@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\ClientReviewController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PageController;
@@ -137,6 +138,10 @@ Route::group(['middleware' => ['role_permission:admin']], function () {
     Route::get('/admin/discounts/list', [DiscountController::class, 'list']);
     Route::delete('/admin/discounts/destroy', [DiscountController::class, 'delete']);
     Route::post('/admin/discounts/get-course', [DiscountController::class, 'getCourse'])->name('get.course');
+
+    #Reviews
+    Route::get('/admin/reviews/list', [ClientReviewController::class, 'list']);
+    Route::delete('/admin/reviews/destroy', [ClientReviewController::class, 'delete']);
 
     //logic xử lý upload file.
     Route::post('upload', function (Request $request) {

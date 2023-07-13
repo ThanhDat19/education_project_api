@@ -161,6 +161,19 @@
                     </ul>
                 </li>
 
+                {{-- REVIEW --}}
+                <li class="sidebar-item has-sub">
+                    <a href="#" class="sidebar-link">
+                        <i class="nav-icon fas fa-street-view"></i>
+                        <span>Đánh giá</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="/admin/reviews/list">Danh sách đánh giá</a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- USER --}}
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">

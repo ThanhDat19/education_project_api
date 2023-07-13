@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ChartController;
+use App\Http\Controllers\API\ClientReviewController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CourseStudentController;
 use App\Http\Controllers\API\FooterController;
@@ -53,6 +54,7 @@ Route::controller(TodoController::class)->group(function () {
 Route::get('/chart-data', [ChartController::class, 'onAllSelect']);
 //Client Route
 Route::get('/client-review', [ClientReviewController::class, 'onAllSelect']);
+Route::post('/post-review', [ClientReviewController::class, 'postReview']);
 //Contact Form Route
 Route::post('/contact-send', [ContactController::class, 'onContactSend']);
 //Course Route

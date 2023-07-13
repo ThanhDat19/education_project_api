@@ -35,7 +35,7 @@ class CoursesController extends Controller
         $categories = CourseCategory::all();
         return response()->json([
             "total_pages" => $totalPages,
-            "courses" => $courses,
+            "courses" => CourseResource::collection($courses),
             "request" => $request->input(),
             "categories" => $categories,
         ]);
@@ -294,6 +294,7 @@ class CoursesController extends Controller
                 $totalPages = $courses->lastPage();
                 foreach ($courses as $course) {
                     $course->lessons = Lesson::where('course_id', $course->course_id)->count();
+                    $course->averageRating = CourseStudent::where('course_id', $course->course_id)->avg('rating');
                 }
                 $types = QuestionType::all();
                 return response()->json([
