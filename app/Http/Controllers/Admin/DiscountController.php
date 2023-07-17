@@ -46,6 +46,25 @@ class DiscountController extends Controller
 
     public function store(Request $request)
     {
+        $customMessages = [
+            'required' => 'Trường :attribute là bắt buộc.',
+            'numeric' => 'Trường :attribute phải là một số.',
+            'date_format' => 'Trường :attribute phải có định dạng ngày-tháng-năm.',
+            'after_or_equal' => 'Trường :attribute phải lớn hơn hoặc bằng ngày hiện tại.',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'discount_types' => 'required',
+            'reduction_rate' => 'required|numeric',
+            'course_id' => 'required',
+            'start_date' => 'required|date_format:d-m-Y|after_or_equal:today',
+            'end_date' => 'required|date_format:d-m-Y|after_or_equal:today',
+        ], $customMessages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         try {
 
             $timestamp = Carbon::createFromFormat('d-m-Y', $request->input('start_date'))->timestamp;
@@ -69,7 +88,7 @@ class DiscountController extends Controller
                     return redirect()->back();
                 }
             } else {
-                if ($request->input('reduction_rate') >= 10 && $request->input('reduction_rate') <= 100) {
+                if ($request->input('reduction_rate') >= 10 && $request->input('reduction_rate') <= 90) {
                     $discount = Discount::create([
                         'name' => $request->input('name'),
                         'discount_types' => $request->input('discount_types'),

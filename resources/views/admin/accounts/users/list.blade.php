@@ -35,11 +35,11 @@
                                     <a href="/admin/student/show/{{ $user->id }}" class="btn btn-primary">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="#" onclick="removeRow({{ $user->id }},'/admin/student/delete')"
+                                    <a href="#"
+                                        onclick="removeRow({{ $user->id }},'/admin/student/studentDelete')"
                                         class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </a>
-
                                 </td>
                             </tr>
                         @endforeach

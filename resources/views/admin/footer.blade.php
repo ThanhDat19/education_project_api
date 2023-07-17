@@ -7,6 +7,34 @@
 <script src="/template/admin/js/main.js"></script> --}}
 {{-- <script src="/template/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> --}}
 <script src="/template/admin/js/main.js"></script>
+<script>
+    $("#upload").change(function() {
+        const form = new FormData();
+        form.append("file", $(this)[0].files[0]);
+        $.ajax({
+            processData: false,
+            contentType: false,
+            type: "POST",
+            datatype: "JSON",
+            data: form,
+            url: "/upload/services",
+            success: function(results) {
+                if (results.error == false) {
+                    $("#image_show").html(
+                        '<a href="' +
+                        results.url +
+                        '" target="_blank"><img src="' +
+                        results.url +
+                        '" width="400px"></a>'
+                    );
+                    $("#image").val(results.url);
+                } else {
+                    alert("Tải ảnh lỗi!");
+                }
+            },
+        });
+    });
+</script>
 <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 {{-- <script src="https://cdn.datatables.net/v/dt/dt-1.13.4/datatables.min.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>

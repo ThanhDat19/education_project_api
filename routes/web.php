@@ -39,7 +39,7 @@ Auth::routes();
 // web.php
 
 Route::group(['middleware' => ['role_permission:admin']], function () {
-    // Các route yêu cầu quyền "manage_users" sẽ được áp dụng middleware
+    // Các route yêu cầu quyền "admin" sẽ được áp dụng middleware
     // và chỉ những người dùng có quyền này mới có thể truy cập vào các route này
 
     #Home
@@ -127,6 +127,7 @@ Route::group(['middleware' => ['role_permission:admin']], function () {
     Route::put('/admin/student/edit', [AccountController::class, 'studentPut']);
     Route::get('/profile/edit/{user}', [AccountController::class, 'userShow']);
     Route::post('/profile/edit/{user}', [AccountController::class, 'userUpdate']);
+    Route::delete('/admin/student/studentDelete', [AccountController::class, 'studentDelete']);
 
     #Comments
     Route::get('/admin/comments/list', [CommentController::class, 'list']);

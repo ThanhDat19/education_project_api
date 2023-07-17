@@ -47,6 +47,7 @@ class CourseController extends Controller
             'required' => 'Trường :attribute là bắt buộc.',
             'numeric' => 'Trường :attribute phải là một số.',
             'date_format' => 'Trường :attribute phải có định dạng ngày-tháng-năm.',
+            'after_or_equal' => 'Trường :attribute phải lớn hơn hoặc bằng ngày hiện tại.',
         ];
 
         $validator = Validator::make($request->all(), [
@@ -55,7 +56,7 @@ class CourseController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'required',
-            'start_date' => 'required|date_format:d-m-Y',
+            'start_date' => 'required|date_format:d-m-Y|after_or_equal:today',
             'published' => 'required',
         ], $customMessages);
 
@@ -104,6 +105,7 @@ class CourseController extends Controller
             'required' => 'Trường :attribute là bắt buộc.',
             'numeric' => 'Trường :attribute phải là một số.',
             'date_format' => 'Trường :attribute phải có định dạng ngày-tháng-năm.',
+            'after_or_equal' => 'Trường :attribute phải lớn hơn hoặc bằng ngày hiện tại.',
         ];
 
         $validator = Validator::make($request->all(), [
@@ -112,7 +114,7 @@ class CourseController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'required',
-            'start_date' => 'required|date_format:d-m-Y',
+            'start_date' => 'required|date_format:d-m-Y|after_or_equal:today',
             'published' => 'required',
         ], $customMessages);
 

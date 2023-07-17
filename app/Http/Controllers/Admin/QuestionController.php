@@ -143,7 +143,7 @@ class QuestionController extends Controller
         if ($course) {
             $questions = Question::where('question_type_id', $course->type)->get();
         } else {
-            $questions = Question::all();
+            $questions = Question::where('question_type_id', $request->input('questionTypeId'))->get();
         }
 
         return view('admin.questions.filter-by-type', ['questions' => $questions]);

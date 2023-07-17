@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\TestResource;
+use App\Models\Courses;
 use App\Models\Lesson;
 use App\Models\Test;
 use App\Models\TestResult;
@@ -153,6 +154,7 @@ class TestController extends Controller
 
     public function teacherPostTests(Request $request)
     {
+
         try {
             // Lấy dữ liệu từ request
             $data = $request->validate([
@@ -160,9 +162,9 @@ class TestController extends Controller
                 'course_id' => 'required|integer',
                 'lesson_id' => 'required|integer',
                 'description' => 'required|string',
-                'type' => 'required|integer'
             ]);
 
+            $course = Courses::find($data['course_id']);
             // Tạo bài kiểm tra mới
             $test = Test::create([
                 'title' => $data['title'],
@@ -170,7 +172,7 @@ class TestController extends Controller
                 'lesson_id' => $data['lesson_id'],
                 'description' => $data['description'],
                 'published' => 0,
-                'type'=> $data['type']
+                'type' => $course->type
             ]);
 
             $test->save();

@@ -155,4 +155,29 @@ class AccountController extends Controller
 
         return redirect()->back();
     }
+
+    public function studentDelete(Request $request)
+    {
+        try {
+            $result = false;
+            $user = User::where('id', $request->input('id'))->first();
+
+            if ($user) {
+                $user->delete();
+                $result = true;
+            }
+
+            if ($result) {
+                return response()->json([
+                    'error' => false,
+                    'message' => 'Xóa user thành công'
+                ]);
+            }
+        } catch (\Exception $error) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Đã có lỗi xảy ra'
+            ]);
+        }
+    }
 }
